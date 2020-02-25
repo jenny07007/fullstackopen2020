@@ -1,0 +1,75 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.App {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  margin: 2em 5em;
+}
+h2 {
+  padding: 1em 0;
+  margin-top: 1em;
+}
+
+input {
+  margin: 0.2em 0;
+  margin-left: 1em;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid #222;
+  font-size: 1em;
+  color: peru;
+  padding: 0.5em;
+  letter-spacing: 1.2px;
+}
+
+input:focus {
+  background: #eee;
+}
+
+.form-input {
+  margin: 0.5em 0;
+  height: 30px;
+  text-transform: capitalize;
+}
+
+label {
+  text-transform: capitalize;
+}
+
+button, .deleteBtn {
+  font-size: 0.9em;
+  padding: 0.3em 0.8em;
+  outline: none;
+  border: 1px solid #222;
+  background: #222;
+  margin-top: 0.5em;
+  width: 100px;
+  cursor: pointer;
+  color: white;
+  text-transform: uppercase;
+}
+
+button:hover {
+  color: #222;
+  background: white;
+  border: 1px solid #222;
+}
+
+p {
+  line-height: 1.8;
+  font-size: 1em;
+  color: peru;
+  text-transform: capitalize;
+}
+
+.deleteBtn {
+  font-size: 0.8em;
+  margin-left: 2em;
+  padding: 0.3em 0.3em;
+  background: peru;
+  border: 1px solid peru;
+}

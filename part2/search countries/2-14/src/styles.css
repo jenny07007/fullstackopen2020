@@ -1,0 +1,14 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+label {
+  margin-right: 10px;
+}
+li {
+  list-style: none;
+  padding: 3px 0;
+}
+img {
+  width: 20%;
+}
