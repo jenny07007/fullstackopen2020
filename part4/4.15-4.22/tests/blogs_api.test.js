@@ -137,7 +137,7 @@ test("on updating the information of a blog post", async () => {
 });
 
 // 4.22
-test("should fail and returns proper status code when adding a new post without the token ", async () => {
+test("should fail and return proper status code when adding a new post without the token ", async () => {
   const blogsAtStart = await helper.blogsInDb();
 
   const newPost = {

@@ -15,7 +15,7 @@ usersRouter.get("/", async (req, res) => {
 usersRouter.post("/", async (req, res, next) => {
   const { name, password } = req.body;
   let { username } = req.body;
-  username = username.replace(/\s/g, "").toLowerCase(); // change the valifation from frontend
+  username = username.replace(/\s/g, "").toLowerCase(); // may be implemented from frontend side
 
   try {
     const salt = 10;

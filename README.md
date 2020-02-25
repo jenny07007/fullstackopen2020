@@ -1,6 +1,6 @@
 ##### My submissions for [Fullstack Open 2020](https://fullstack-hy2020.github.io/en/)
 
-- The submission will be the same to 2019 before part 4, as the material of 2020 will not have big changes before that.
+- Before the part 4,the submissions will be the same to 2019, as the material of 2020 does not have big changes before then.
 
 ### Part 0
 
