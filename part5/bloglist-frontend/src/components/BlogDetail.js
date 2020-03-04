@@ -14,17 +14,17 @@ const BlogDetail = React.forwardRef(
     useImperativeHandle(ref, () => ({ toggleVisibility }));
 
     return (
-      <div style={showStyle}>
-        <li>
+      <div className="blog-list-showStyle" style={showStyle}>
+        <li className="blog-list url">
           <a href={blog.url}>{blog.url}</a>
         </li>
-        <li className="blog-list">
+        <li className="blog-list likes">
           {`Likes: ${blog.likes}`}
           <button className="like-btn" onClick={onHandleLikes}>
             <i className="fas fa-heart"></i>
           </button>
         </li>
-        <li className="blog-list">{`addd by ${blog.user.name}`}</li>
+        <li className="blog-list user-name">{`addd by ${blog.user.name}`}</li>
         <button onClick={onHandleRemove} className="delete-btn">
           Delete
         </button>

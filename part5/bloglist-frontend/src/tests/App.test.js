@@ -1,41 +1,64 @@
 import React from "react";
-import { render, waitForElement } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
+import { render, fireEvent } from "@testing-library/react";
+import Blog from "../components/Blog";
 jest.mock("../services/blogs");
-import App from "../App";
 
-const user = {
-  username: "tester",
-  token: "1231231214",
-  name: "Donald Tester"
+const blog = {
+  title: "testing react app",
+  author: "Mars",
+  url: "https://test.com",
+  likes: 3,
+  user: { name: "hello" }
 };
 
-describe("<App />", () => {
-  test("blogs should not render if no user logged in", async () => {
-    const component = render(<App />);
-    component.rerender(<App />);
+describe("blog list tests", () => {
+  const mockHandler = jest.fn();
+  const onHandleRemove = jest.fn();
+  let component;
 
-    await waitForElement(() => component.getByText("Login"));
+  beforeEach(
+    () =>
+      (component = render(
+        <Blog
+          blog={blog}
+          onClick={mockHandler}
+          onHandleLikes={mockHandler}
+          onHandleRemove={onHandleRemove}
+        />
+      ))
+  );
+  // 5.13
+  test("blogs should only render author and title by default", () => {
+    const blogContent = component.container.querySelector(".blog-list-title");
+    const div = component.container.querySelector(".blog-list-showStyle");
 
-    const button = component.container.querySelector(".submit-btn");
-    expect(button).toBeDefined();
-
-    const blogs = component.container.querySelectorAll(".blog-style");
-    expect(blogs.length).toBe(0);
+    expect(div).toHaveStyle("display: none");
+    expect(blogContent).toHaveTextContent(blog.title);
+    expect(blogContent).toHaveTextContent(blog.author);
+    expect(blogContent).not.toHaveTextContent(blog.url);
+    expect(blogContent).not.toHaveTextContent(blog.likes);
   });
 
-  test("blogs should render when a user is logged in", async () => {
-    localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
+  // 5.14
+  test("blogs should render url and numbers of likes when clicking the togglable button", () => {
+    const button = component.container.querySelector(".blog-list-toggle");
+    const div = component.container.querySelector(".blog-list-showStyle");
+    const url = component.container.querySelector(".url");
+    const likes = component.container.querySelector(".likes");
+    fireEvent.click(button);
 
-    const component = render(<App />);
-    component.rerender(<App />);
+    expect(div).not.toHaveStyle("display: none");
+    expect(url).toHaveTextContent(blog.url);
+    expect(likes).toHaveTextContent(blog.likes);
+  });
 
-    await waitForElement(() =>
-      component.container.querySelector(".subtitle-login-info")
-    );
+  // 5.15
+  test("event handler should receive the props twice when clicking the likes button two times", () => {
+    const button = component.container.querySelector(".like-btn");
+    fireEvent.click(button);
+    fireEvent.click(button);
 
-    const blogs = component.container.querySelector(".blog-style");
-    expect(blogs).toBeDefined();
-    expect(blogs).toHaveTextContent("HTML is easy");
-    expect(blogs).toHaveTextContent("Browser can execute only javascript");
+    expect(mockHandler.mock.calls.length).toBe(2);
   });
 });
