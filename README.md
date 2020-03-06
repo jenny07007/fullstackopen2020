@@ -75,7 +75,7 @@
 - props.children and proptypes
   - Togglable component
 - Testing React apps
-- Custom hooks
+- End to End testing
 
 ### Part6
 

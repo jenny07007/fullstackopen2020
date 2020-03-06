@@ -1,4 +1,4 @@
-\*\*\*\*# Exercises
+# Exercises
 
 - 5.1 Bloglist frontend
 
@@ -205,68 +205,34 @@ expect(mockHandler.mock.calls.length).toBe(1);
 #### testing forms
 
 - In practice, we used `fireEvent` to create a click event for the button component. We can also use fireEvent to **simulate filling forms.**
-- create a Wrapper helper to render the form and manage its state props
+- 💁🏼‍♀️ [react-testing-library-examples](https://codesandbox.io/s/github/kentcdodds/react-testing-library-examples/tree/master/?module=%2Fsrc%2F__tests__%2Fon-change.js&previewwindow=tests)
 
-  ```js
-  const Wrapper = props => {
-    const onChange = event => {
-      props.state.value = event.target.value;
-    };
-
-    return (
-      <NoteForm
-        value={props.state.value}
-        onSubmit={props.onSubmit}
-        handleChange={onChange}
-      />
-    );
-  };
-  ```
-
-  ```js
-  const Wrapper = props => {
-    // ...
-  };
-
-  test("<NoteForm /> updates parent state and calls onSubmit", () => {
-    const onSubmit = jest.fn();
-    const state = {
-      value: ""
-    };
-    // pass `onSubmit` mock func and state obj for representing the state
-    const component = render(<Wrapper onSubmit={onSubmit} state={state} />);
-
-    const input = component.container.querySelector("input");
-    const form = component.container.querySelector("form");
-
-    // simulate writing text into the input elem by creating a change event for the input
-    fireEvent.change(input, {
-      target: { value: "testing of forms could be easier" }
-    });
-    // form is submitted by simulating  a submit event
-    fireEvent.submit(form);
-
-    expect(onSubmit.mock.calls.length).toBe(1);
-    expect(state.value).toBe("testing of forms could be easier");
-  });
-  ```
-
-#### frontend integration tests
-
-- challenges
-
-  - data fetched from backend - [sountion](https://jestjs.io/docs/en/manual-mocks.html#content)
-    - create a `__mocks__` subdirectory under the `services` directory that defines `getAll` function returns a hardcoded list, and wrapped a promise with `Promise.solve` method
-    -
-  - local storage for storing information - [solutions](https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests)
-    - write localStorageMock in the `setupTests.js`
-
-- re-rendering the component
-  `component.rerender(<App />)`
-- useing [waitForElement](https://testing-library.com/docs/dom-testing-library/api-async#waitforelement) function for verifying that the App component renders because fetching data from server is an asynchronous event
+###
 
 ```js
-await waitForElement(() => component.container.querySelector(".note"));
+import React from "react";
+import { render, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
+import NoteForm from "./NoteForm";
+
+test("<NoteForm /> updates parent state and calls onSubmit", () => {
+  const createNote = jest.fn();
+
+  const component = render(<NoteForm createNote={createNote} />);
+
+  const input = component.container.querySelector("input");
+  const form = component.container.querySelector("form");
+
+  fireEvent.change(input, {
+    target: { value: "testing of forms could be easier" }
+  });
+  fireEvent.submit(form);
+
+  expect(createNote.mock.calls.length).toBe(1);
+  expect(createNote.mock.calls[0][0].content).toBe(
+    "testing of forms could be easier"
+  );
+});
 ```
 
 #### test coverage
@@ -283,12 +249,6 @@ await waitForElement(() => component.container.querySelector(".note"));
   - to compare the HTML code defined by the component after it has changed to the HTML code that exists before
 
 #
-
-#### end-to-end tests
-
-- inspects the application through the same interface as real end-users
-- use library like [Selenium](https://www.selenium.dev/)
-- use [headless-broswer](https://en.wikipedia.org/wiki/Headless_browser)
 
 #
 
@@ -327,3 +287,304 @@ await waitForElement(() => component.container.querySelector(".note"));
   ```
 
 #
+
+#### [2020new] end-to-end tests
+
+- inspects the application through the same interface as real end-users
+- [system as a whole](https://en.wikipedia.org/wiki/System_testing)
+- [selenium](https://www.selenium.dev/)
+- [headless browser](https://en.wikipedia.org/wiki/Headless_browser) - browsers with no graphical user interface.
+- [regression testing](https://en.wikipedia.org/wiki/Regression_testing)
+
+###
+
+- [cypress](https://www.cypress.io/)
+
+  - can be in the frontend or the backend repository
+  - do not start the system when they are running
+  -
+
+  ```js
+    npm install --save-dev cypress
+  ```
+
+  - config frontend
+
+  ```json
+  {
+    // ...
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test",
+      "eject": "react-scripts eject",
+      "server": "json-server -p3001 db.json",
+      "cypress:open": "cypress open"
+    }
+    // ...
+  }
+  ```
+
+  - config backend, starts in the test mode
+
+  ```json
+    {
+    // ...
+    "scripts": {
+      "start": "cross-env NODE_ENV=production node index.js",
+      "dev": "cross-env NODE_ENV=development nodemon index.js",
+      "build:ui": "rm -rf build && cd ../../../2/luento/notes && npm run build && cp -r build ../../../3/luento/notes-backend",
+      "deploy": "git push heroku master",
+      "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
+      "logs:prod": "heroku logs --tail",
+      "lint": "eslint .",
+      "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+      "start:test": "cross-env NODE_ENV=test node index.js"
+      },
+  ```
+
+  - start Cypress w/ the commmand
+
+  ```bash
+    npm run cypress:open
+  ```
+
+- When we first run Cypress, it creates a cypress directory. It contains a `integrations` subdirectory, where we will place our tests.
+
+###
+
+- [cy.visit](https://docs.cypress.io/api/commands/visit.html#Syntax) - opens the web address given to it as a parameter on the browser used by the test.
+- [cy.contains](https://docs.cypress.io/api/commands/contains.html#Syntax) - searches for the string it received as a parameter from the page.
+- Mocha [recommends](https://mochajs.org/#arrow-functions) that arrow functions are not used, because they might cause some issues in certain situations.
+
+```js
+describe("Note app", function() {
+  it("front page can be opened", function() {
+    cy.visit("http://localhost:3000");
+    cy.contains("Notes");
+    cy.contains(
+      "Note app, Department of Computer Science, University of Helsinki 2020"
+    );
+  });
+
+  it("front page contains random text", function() {
+    cy.visit("http://localhost:3000");
+    cy.contains("wtf is this app?");
+  });
+});
+```
+
+### writing to a form
+
+- [cy.click](https://docs.cypress.io/api/commands/click.html#Syntax)
+- [cy.get](https://docs.cypress.io/api/commands/get.html#Syntax) - searching elements by CSS selectors
+- [cy.type](https://docs.cypress.io/api/commands/type.html#Syntax)
+
+```js
+beforeEach(function() {
+  cy.visit("http://localhost:3000");
+});
+```
+
+```js
+describe("Note app", function() {
+  // ..
+  it("user can log in", function() {
+    // open the login form
+    cy.contains("login").click();
+    cy.get("#username").type("mluukkai");
+    cy.get("#password").type("salainen");
+    // the form is submitted by clicking the submit button
+    cy.get("#login-button").click();
+
+    // ensures login was successful
+    cy.contains("Matti Luukkainen logged in");
+  });
+});
+```
+
+### Eslint error about the variable `cy`
+
+- install `eslint-plugin-cypress`
+  ```bash
+  npm install eslint-plugin-cypress --save-dev
+  ```
+- in the `.eslintrc.js`
+
+  ```json
+  (module.exports = {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "jest/globals": true,
+      "cypress/globals": true
+    },
+    "extends": [
+      // ...
+    ],
+    "parserOptions": {
+      // ...
+    },
+    "plugins": ["react", "jest", "cypress"],
+    "rules": {
+      // ...
+    }
+  })
+  ```
+
+### Controlling the state of the database
+
+- create API endpoints to the backend to empty the database
+- `/api/testing/reset`
+- [cy.request](https://docs.cypress.io/api/commands/request.html)
+
+```js
+//...
+router.post("/reset", async (request, response) => {
+  await Note.deleteMany({});
+  await User.deleteMany({});
+
+  response.status(204).end();
+});
+
+module.exports = router;
+```
+
+- add it to the backend
+
+```js
+app.use("/api/login", loginRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/notes", notesRouter);
+
+if (process.env.NODE_ENV === "test") {
+  const testingRouter = require("./controllers/testing");
+  app.use("/api/testing", testingRouter);
+}
+//...
+```
+
+- add user data from backend
+
+```js
+beforeEach(function() {
+  cy.request("POST", "http://localhost:3001/api/testing/reset");
+  const user = {
+    name: "Matti Luukkainen",
+    username: "mluukkai",
+    password: "salainen"
+  };
+  cy.request("POST", "http://localhost:3001/api/users/", user);
+  cy.visit("http://localhost:3000");
+});
+```
+
+### Failed login test
+
+- `it.only` to run only required test. when the test is working, we can remove it
+- [should()](https://docs.cypress.io/api/commands/should.html#Syntax)
+- [Common Assertions with should()](https://docs.cypress.io/guides/references/assertions.html#Common-Assertions)
+- [and()](https://docs.cypress.io/api/commands/and.html#Syntax)
+
+```js
+  describe('Note app', function() {
+  // ...
+
+  it.only('login fails with wrong password', function() {
+    cy.contains('login').click()
+    cy.get('#username').type('mluukkai')
+    cy.get('#password').type('wrong')
+    cy.get('#login-button').click()
+
+    // to ensure the app will print the error msg
+    cy.get(".error").contains("wrong credentials");
+    // or using `should` and chain then using `and`
+    cy.get(".error")
+      .should('contain', 'wrong credentials')
+      .and('have.css', 'color', 'rgb(255, 0, 0)')
+      .and('have.css', 'border-style', 'solid')
+    //`should` always be used chained with `get` (or another chainable command).
+    cy.get('html').should('not.contain', 'Matti Luukkainen logged in')
+  })
+
+  // ...
+)}
+```
+
+### bypassing the UI
+
+- [bypassing the UI](https://docs.cypress.io/guides/getting-started/testing-your-app.html#Logging-in) - because it's much faster logging in with a HTTP request than a form
+- `cy.request` like all Cypress commands are `Promises`
+- save user login info into localstorage
+
+  ```js
+  beforeEach(function() {
+    cy.login({ username: "mluukkai", password: "salainen" });
+  });
+  ```
+
+- add a custom command because the login code will be used in multiple places when we wrtie new tests
+- `cypress/support/commands.js`
+
+  ```js
+  Cypress.Commands.add("login", ({ username, password }) => {
+    cy.request("POST", "http://localhost:3001/api/login", {
+      username,
+      password
+    }).then(({ body }) => {
+      localStorage.setItem("loggedNoteappUser", JSON.stringify(body));
+      cy.visit("http://localhost:3000");
+    });
+  });
+  ```
+
+- other useful commands
+  - [parent()](https://docs.cypress.io/api/commands/parent.html#Syntax)
+  - [find()](https://docs.cypress.io/api/commands/parent.html#Syntax)
+  - [as()](https://docs.cypress.io/api/commands/as.html#Syntax)
+
+### run Cypress tests from CLI
+
+```json
+  "script: {
+    //...
+    "test:e2e": "cypress run"
+  }
+```
+
+#
+
+#
+
+- 5.17 bloglist end to end testing
+  - configure Cypress to the project
+  - make a test for checking the app displays the login form by default
+
+#
+
+- 5.18 bloglist end to end testing
+  - makes for logging in (uccessful and unsuccessful log in attempts)
+  - make a new user in the `beforeEach` block for the tests
+  - check the unsuccessful login notification is shown in red
+
+#
+
+- 5.19 bloglist end to end testing
+  - make a test to check a logged-in user can create a new blog
+  - the test has to ensure that a blog is added to the list of all blogs
+
+#
+
+- 5.20 bloglist end to end testing
+  - make a test to check a user can like a blog
+
+#
+
+- 5.21 bloglist end to end testing
+  - make a test to ensure a user can delete a blog
+  - also check other users cannot delete the blog
+
+#
+
+- 5.22 bloglist end to end testing
+  - make a test to check the order of blogs is based on the number of likes with a descending order
