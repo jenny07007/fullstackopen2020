@@ -18,6 +18,7 @@ Cypress.Commands.add("createBlog", ({ title, author, url }) => {
         JSON.parse(localStorage.getItem("LoggedInUser")).token
       }`
     }
+  }).then(() => {
+    cy.visit("http://localhost:3000");
   });
-  cy.visit("http://localhost:3000");
 });

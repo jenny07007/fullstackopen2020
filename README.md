@@ -76,6 +76,7 @@
   - Togglable component
 - Testing React apps
 - End to End testing
+  - [cypress](https://www.cypress.io/)
 
 ### Part6
 

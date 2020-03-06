@@ -47,7 +47,7 @@ describe("Blog app", function() {
     });
   });
 
-  describe("when logged in", function() {
+  describe.only("when logged in", function() {
     beforeEach(function() {
       cy.login({
         username: "helloworld2",
@@ -58,16 +58,24 @@ describe("Blog app", function() {
     // 5.19
     it("should be able to create a new blog that to be shown on the blog list", function() {
       cy.contains("New Blog").click();
-      cy.get("#title").type("e2e testing");
-      cy.get("#author").type("Mars");
-      cy.get("#url").type("https://test.test");
-      cy.get(".submit-btn").click();
-
-      cy.get(".success").should("contain", "success!");
-      cy.get(".blog-list-title")
-        .should("contain", "e2e testing")
-        .should("contain", "Mars")
-        .should("not.contain", "https://test.test");
+      cy.get("#title")
+        .type("e2e testing")
+        .should("have.value", "e2e testing");
+      cy.get("#author")
+        .type("Mars")
+        .should("have.value", "Mars");
+      cy.get("#url")
+        .type("https://test.test")
+        .should("have.value", "https://test.test");
+      cy.get(".submit-btn")
+        .click()
+        .then(() => {
+          cy.visit("http://localhost:3000");
+          cy.get(".blog-list-title")
+            .should("contain", "e2e testing")
+            .should("contain", "Mars")
+            .should("not.contain", "https://test.test");
+        });
     });
 
     // 5.20
@@ -91,13 +99,13 @@ describe("Blog app", function() {
       });
 
       // 5.21
-      it("should be deleted successfully when a user is the creator", () => {
+      it("should be deleted successfully when a user is the creator", function() {
         cy.get(".blog-list-toggle").click();
         cy.get(".delete-btn").click();
-        cy.contains("first blog").should("not.exist");
+        cy.get(".blog-list-title").should("not.exist");
       });
 
-      it("should not be deleted when the user is not the creator", () => {
+      it("should not be deleted when the user is not the creator", function() {
         cy.login({ username: "fakeuser", password: "fakeuser123" });
         cy.get(".subtitle-login-info").should("contain", "fakeuser");
 
@@ -120,6 +128,20 @@ describe("Blog app", function() {
           author: "Sun",
           url: "https://second.net"
         });
+      });
+
+      it("blogs should be displayed in a descending order based on the number of likes", function() {
+        cy.contains("second blog")
+          .click()
+          .children()
+          .get(".like-btn")
+          .last()
+          .click();
+
+        cy.visit("http://localhost:3000");
+        cy.get(".blog-list-title")
+          .first()
+          .should("contain", "second blog");
       });
     });
   });
