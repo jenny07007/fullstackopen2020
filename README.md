@@ -77,9 +77,11 @@
 - Testing React apps
 - End to End testing
   - [cypress](https://www.cypress.io/)
+  - [the testing result video](https://raw.githubusercontent.com/jenny07007/fullstackopen2020/master/part5/bloglist-frontend/cypress/videos/blog_app_login_form.speck.js.mp4)
 
 ### Part6
 
 - Flux-architecture and Redux
-- reducers, connect
+- reducers
 - communicating with server in a redux app
+- connect
