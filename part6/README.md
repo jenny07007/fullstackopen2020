@@ -18,3 +18,13 @@
 
 - 6.2 unicate revisited
   - implement the actual functionality of the application
+
+#
+
+- 6.3 - 6.8 anecotes
+  - implement the functionality for voting anecdotes. the amount of votes must be saved to Redux-Store
+  - implement the functionality for adding new anecdotes
+  - make sure that the anecdotes are ordered by the number of votes
+  - separate the creation of action-objects to 'action creator' functions, and place them at `src/reducers/anecdoteReducer.js`
+  - separate the creation of new anecdotes into its own component called `AnecdoteForm`.
+  - separate the rendering of the anecdote list into its own component called `AnecdoteList`.
