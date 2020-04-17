@@ -1,19 +1,17 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { giveAVote, setNotification, hideNotification } from "../actions";
+import { giveAVote, setNotification } from "../actions";
+import Anecdote from "./Anecdote";
 
 const AnecdoteList = () => {
+  const dispatch = useDispatch();
   const anecdotes = useSelector(({ filters, anecdotes }) =>
     anecdotes.filter((a) => a.content.toLowerCase().includes(filters))
   );
-  const dispatch = useDispatch();
 
   const handleClick = (id, msg) => {
     dispatch(giveAVote(id));
-    dispatch(setNotification(`Voted on "${msg}"`));
-    setTimeout(() => {
-      dispatch(hideNotification());
-    }, 5000);
+    dispatch(setNotification(`you voted on '${msg}'`, 5));
   };
 
   return (
@@ -21,17 +19,11 @@ const AnecdoteList = () => {
       {anecdotes
         .sort((a, b) => b.votes > a.votes)
         .map((anecdote) => (
-          <div key={anecdote.id}>
-            <div>{anecdote.content}</div>
-            <div style={{ lineHeight: "2em" }}>
-              has {anecdote.votes}
-              <button
-                onClick={() => handleClick(anecdote.id, anecdote.content)}
-              >
-                vote
-              </button>
-            </div>
-          </div>
+          <Anecdote
+            key={anecdote.id}
+            anecdote={anecdote}
+            handleClick={handleClick}
+          />
         ))}
     </div>
   );

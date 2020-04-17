@@ -37,3 +37,22 @@
   - using `combine reducer`
   - using the noticication component to display a message for 5 seconds when a use votes for an anecdote or creates a new anecdote
   - create a new `Filter` component to filter anecdotes
+
+#
+
+- 6.13 - 6.14
+  - fetching anecdotes from backend implemented using `json-server`
+  - modify the creation of new anecdotes
+
+#
+
+- 6.15- 6.18
+
+  - modify the initialization of redux-store using asynchronous action creators by implementing `redux-thunk`
+  - modify the creation of a new anecdote using asynchronous action creators by implementing `redux-thunk`
+  - save the voting changes to the backend by using `redux-thunk`
+  - change the creation of notifications to be
+    #####
+    ```js
+    dispatch(setNotification(`you voted '${anecdote.content}'`, 10));
+    ```
