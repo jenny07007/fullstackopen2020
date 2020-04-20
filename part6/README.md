@@ -56,3 +56,13 @@
     ```js
     dispatch(setNotification(`you voted '${anecdote.content}'`, 10));
     ```
+
+#
+
+- 6.19-6.21
+
+  - add `react-redux` to the application
+  - modify the `AnecdoteList`, `Filter` and `AnecdoteForm` accessing the store's state with the `connect` function
+  - voting for and creating new anecdotes do not need to work after this exercise
+  - add the `mapStateToProp` function
+  - fix the bug so that after multiple votes in a row, the notification for the last vote is displayed for five seconds. (`clearTimeOut()`)
