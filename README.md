@@ -85,3 +85,12 @@
 - reducers
 - communicating with server in a redux app
 - connect
+
+### Part 7
+
+- React-router
+- Custom hooks
+- More about styles
+- Webpack
+- Class components, Miscellaneous
+- Extending the bloglist
