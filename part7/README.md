@@ -193,3 +193,18 @@ if (!window.Promise) {
 #
 
 - 7.9 - 7.21 extending the bloglist
+  - Redux
+    - refactor the application and its notifications with Redux
+    - store the information about blog posts in the Redux store
+    - the app should be able to like and delete a blog
+    - store the information about the signed in user in the Redux store
+  - Users view
+    - implement a view to the applicaiton that displays all of the basc info related to users as well as an indivdual user
+  - Blog view
+    - implement a separate view for blog posts, so that a blog post no longer needs to be toggled to expand the item in the list
+  - Navigation
+    - implement a navigation menu for the application
+  - comments
+    - implement anonymous comments
+    - users should be able to add comments to blog posts from the frontend
+  - Styles
