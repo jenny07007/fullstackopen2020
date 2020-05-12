@@ -94,3 +94,11 @@
 - Webpack
 - Class components, Miscellaneous
 - Extending the bloglist
+
+### Part 8
+
+- GraphQL server
+- React and GraphQL
+- Database and user administration
+- Login and updating the cache
+- Fragments and subscriptions

@@ -1,11 +1,8 @@
 import { SIGN_IN_SUCCESS, SIGN_OUT, SIGN_IN_ERROR } from "../actions/types";
 
 const INITIAL_STATE = {
-  isSignedIn: false,
-  userId: null,
-  username: null,
-  token: null,
-  error: null,
+  currentUser: {},
+  error: {},
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -13,10 +10,7 @@ export default (state = INITIAL_STATE, action) => {
     case SIGN_IN_SUCCESS:
       return {
         ...state,
-        isSignedIn: true,
-        userId: action.payload.id,
-        username: action.payload.username,
-        token: action.payload.token,
+        currentUser: action.payload,
         error: null,
       };
     case SIGN_IN_ERROR:
@@ -27,11 +21,7 @@ export default (state = INITIAL_STATE, action) => {
     case SIGN_OUT:
       return {
         ...state,
-        isSignedIn: false,
-        userId: null,
-        username: null,
-        token: null,
-        error: null,
+        currentUser: {},
       };
 
     default:

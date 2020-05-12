@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Route, Switch, useHistory, Link } from "react-router-dom";
 
 import {
   signIn,
@@ -9,30 +10,27 @@ import {
   setAToken,
 } from "./actions";
 
-import BlogList from "./components/BlogList";
-import BlogForm from "./components/BlogForm";
-import LoginForm from "./components/LoginForm";
-import BlogFormHeader from "./components/BlogFormHeader";
-import Notification from "./components/Notification";
-import Togglable from "./components/Togglable";
+import Landing from "./components/Landing";
+import Dashboard from "./components/Dashboard";
 import "./App.css";
 
 function App() {
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
   // const blogs = useSelector((state) => state.blogs);
   const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
   const [userLoginInfo, setUserLoginInfo] = useState({
     username: "",
     password: "",
   });
-  const blogFormRef = React.createRef();
+  // const blogFormRef = React.createRef();
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("LoggedInUser");
     if (!loggedUserJSON) return null;
-    const user = JSON.parse(loggedUserJSON);
-    dispatch(setAToken(user.token));
+    const token = JSON.parse(loggedUserJSON);
+    dispatch(setAToken(token));
   }, [dispatch]);
 
   const showHideNotification = (type, message) => {
@@ -45,16 +43,19 @@ function App() {
     if (!username || !password) {
       return showHideNotification("Error!", "incorrect username or password!");
     }
-
     try {
       dispatch(signIn({ username, password }));
-      dispatch(setAToken(auth.token));
-
-      window.localStorage.setItem("LoggedInUser", JSON.stringify(auth));
+      // TODO!!
+      dispatch(setAToken(auth.currentUser.token));
+      window.localStorage.setItem(
+        "LoggedInUser",
+        JSON.stringify(auth.currentUser.token)
+      );
 
       setUserLoginInfo({ username: "", password: "" });
+      history.push("/blogs");
     } catch (error) {
-      showHideNotification("Error!", `${error}`);
+      return showHideNotification("Error!", `${auth.error}`);
     }
   };
 
@@ -62,6 +63,7 @@ function App() {
     dispatch(signOut());
     window.localStorage.removeItem("LoggedInUser");
     dispatch(setAToken(""));
+    history.push("/login");
   };
 
   const onNewblogChange = (e) => {
@@ -77,7 +79,7 @@ function App() {
   const onAddNewBlog = async (e) => {
     e.preventDefault();
 
-    blogFormRef.current.toggleVisibility();
+    // blogFormRef.current.toggleVisibility();
 
     const { title, author, url } = newBlog;
     try {
@@ -97,43 +99,26 @@ function App() {
     }
   };
 
-  const blogForm = () => {
-    return (
-      <div className="create-new-form">
-        <h2>blogs</h2>
-        <BlogFormHeader user={auth} handleLogout={handleLogout} />
-        <Notification />
-        <div>
-          <Togglable buttonLabel="New Blog" ref={blogFormRef}>
-            <BlogForm
-              onNewblogChange={onNewblogChange}
-              onAddNewBlog={onAddNewBlog}
-              newBlog={newBlog}
-            />
-          </Togglable>
-        </div>
-        <ul>
-          <BlogList />
-        </ul>
-      </div>
-    );
-  };
-
   return (
     <div>
-      {auth.isSignedIn && auth.userId ? (
-        blogForm()
-      ) : (
-        <div className="home-login">
-          <h2>Log in</h2>
-          <Notification />
-          <LoginForm
+      <Switch>
+        <Route path="/" exact render={() => <Link to="/login">login</Link>} />
+        <Route path="/login" exact>
+          <Landing
             handleLogin={handleLogin}
             userLoginInfo={userLoginInfo}
             onUserLoginInfoChange={onUserLoginInfoChange}
           />
-        </div>
-      )}
+        </Route>
+        <Route path="/blogs" exact>
+          <Dashboard
+            handleLogout={handleLogout}
+            onNewblogChange={onNewblogChange}
+            onAddNewBlog={onAddNewBlog}
+            newBlog={newBlog}
+          />
+        </Route>
+      </Switch>
     </div>
   );
 }

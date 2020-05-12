@@ -1,12 +1,12 @@
 export const SIGN_IN_SUCCESS = "SIGN_IN_SUCCESS";
 export const SIGN_OUT = "SIGN_OUT";
-export const CREATE_BLOG = "CREATE_BLOG";
+export const SIGN_IN_ERROR = "SIGN_IN_ERROR";
 export const FETCH_BLOG = "FETCH_BLOG";
 export const FETCH_BLOGS = "FETCH_BLOGS";
-export const FETCH_USERS = "FETCH_USERS";
+export const CREATE_BLOG = "CREATE_BLOG";
 export const LIKE_BLOG = "LIKE_BLOG";
 export const REMOVE_BLOG = "REMOVE_BLOG";
+export const SET_TOKEN = "SET_TOKEN";
+export const FETCH_USERS = "FETCH_USERS";
 export const SHOW_MESSAGE = "SHOW_MESSAGE";
 export const HIDE_MESSAGE = "HIDE_MESSAGE";
-export const SIGN_IN_ERROR = "SIGN_IN_ERROR";
-export const SET_TOKEN = "SET_TOKEN";

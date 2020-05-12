@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBlogs, setNotification, likeBlog, deleteBlog } from "../actions";
+import {
+  fetchBlogs,
+  setNotification,
+  likeBlog,
+  deleteBlog,
+} from "../../actions";
 import Blog from "./Blog";
 // import PropTypes from "prop-types";
 

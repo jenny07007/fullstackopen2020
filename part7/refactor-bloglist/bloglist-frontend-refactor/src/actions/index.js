@@ -22,7 +22,9 @@ export const signIn = (cred) => async (dispatch) => {
   }
 };
 
-export const signOut = () => ({ type: SIGN_OUT });
+export const signOut = () => {
+  return { type: SIGN_OUT };
+};
 
 export const createBlog = (content) => async (dispatch) => {
   const res = await create(content);

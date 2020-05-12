@@ -26,7 +26,7 @@ const BlogDetail = React.forwardRef(
             <i className="fas fa-heart"></i>
           </button>
         </li>
-        <li className="blog-list user-name">{`addd by ${auth.username}`}</li>
+        <li className="blog-list user-name">{`addd by ${auth.currentUser.username}`}</li>
         <button onClick={onHandleRemove} className="delete-btn">
           Delete
         </button>
