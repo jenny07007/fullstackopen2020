@@ -9,8 +9,10 @@ import {
   FETCH_BLOGS,
   LIKE_BLOG,
   REMOVE_BLOG,
+  FETCH_USERS,
 } from "./types";
 import { login } from "../services/login";
+import { getAllUsers } from "../services/users";
 import { create, setToken, getAll, update, remove } from "../services/blogs";
 
 export const signIn = (cred) => async (dispatch) => {
@@ -49,6 +51,11 @@ export const likeBlog = (id, newobj) => async (dispatch) => {
 export const deleteBlog = (id) => async (dispatch) => {
   await remove(id);
   dispatch({ type: REMOVE_BLOG, payload: id });
+};
+
+export const fetchUsers = () => async (dispatch) => {
+  const res = await getAllUsers();
+  dispatch({ type: FETCH_USERS, payload: res });
 };
 
 export const setNotification = (type, message, time) => (dispatch) => {

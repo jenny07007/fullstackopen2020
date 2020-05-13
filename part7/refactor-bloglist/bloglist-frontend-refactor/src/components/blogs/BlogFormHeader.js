@@ -22,7 +22,7 @@ const BlogFormHeader = ({ user, handleLogout }) => {
 
 BlogFormHeader.propTypes = {
   user: PropTypes.object.isRequired,
-  handleLogout: PropTypes.func.isRequired
+  handleLogout: PropTypes.func.isRequired,
 };
 
 export default BlogFormHeader;

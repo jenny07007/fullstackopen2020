@@ -29,6 +29,19 @@ h4 {
   display: inline-block;
 }
 
+nav {
+  margin-right: 0;
+}
+
+nav a {
+  margin-right: 2em;
+  font-size: 1.1em;
+}
+
+nav a:hover {
+  border-bottom: none;
+}
+
 .home-login {
   display: flex;
   flex-direction: column;
@@ -52,7 +65,7 @@ h4 {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin-top: -1.5em;
+  margin-top: 2em;
   margin-bottom: 2em;
 }
 

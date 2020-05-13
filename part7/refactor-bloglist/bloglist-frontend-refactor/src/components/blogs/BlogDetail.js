@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 const BlogDetail = React.forwardRef(
   ({ blog, visible, setVisible, onHandleLikes, onHandleRemove }, ref) => {
     const auth = useSelector((state) => state.auth);
+    if (!auth) return;
+
     const showStyle = {
       display: visible ? "" : "none",
       lineHeight: "1.8",

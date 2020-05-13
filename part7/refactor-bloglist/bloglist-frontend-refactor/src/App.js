@@ -12,6 +12,7 @@ import {
 
 import Landing from "./components/Landing";
 import Dashboard from "./components/Dashboard";
+import BlogsView from "./components/BlogsView";
 import "./App.css";
 
 function App() {
@@ -22,9 +23,22 @@ function App() {
     password: "",
   });
   // const blogFormRef = React.createRef();
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector(({ auth }) => auth);
   const dispatch = useDispatch();
   const history = useHistory();
+
+  // sync auth state to localstorage
+  useEffect(() => {
+    if (!auth.currentUser) {
+      window.localStorage.setItem("LoggedInUser", JSON.stringify(""));
+    } else {
+      dispatch(setAToken(auth.currentUser.token));
+      window.localStorage.setItem(
+        "LoggedInUser",
+        JSON.stringify(auth.currentUser.token)
+      );
+    }
+  }, [dispatch, auth]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("LoggedInUser");
@@ -45,15 +59,9 @@ function App() {
     }
     try {
       dispatch(signIn({ username, password }));
-      // TODO!!
-      dispatch(setAToken(auth.currentUser.token));
-      window.localStorage.setItem(
-        "LoggedInUser",
-        JSON.stringify(auth.currentUser.token)
-      );
 
       setUserLoginInfo({ username: "", password: "" });
-      history.push("/blogs");
+      history.push("/users");
     } catch (error) {
       return showHideNotification("Error!", `${auth.error}`);
     }
@@ -63,7 +71,7 @@ function App() {
     dispatch(signOut());
     window.localStorage.removeItem("LoggedInUser");
     dispatch(setAToken(""));
-    history.push("/login");
+    history.push("/");
   };
 
   const onNewblogChange = (e) => {
@@ -102,16 +110,18 @@ function App() {
   return (
     <div>
       <Switch>
-        <Route path="/" exact render={() => <Link to="/login">login</Link>} />
-        <Route path="/login" exact>
+        <Route path="/" exact>
           <Landing
             handleLogin={handleLogin}
             userLoginInfo={userLoginInfo}
             onUserLoginInfoChange={onUserLoginInfoChange}
           />
         </Route>
+        <Route path="/users" exact>
+          <Dashboard handleLogout={handleLogout} />
+        </Route>
         <Route path="/blogs" exact>
-          <Dashboard
+          <BlogsView
             handleLogout={handleLogout}
             onNewblogChange={onNewblogChange}
             onAddNewBlog={onAddNewBlog}

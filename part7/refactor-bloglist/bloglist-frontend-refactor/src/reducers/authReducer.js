@@ -1,8 +1,8 @@
 import { SIGN_IN_SUCCESS, SIGN_OUT, SIGN_IN_ERROR } from "../actions/types";
 
 const INITIAL_STATE = {
-  currentUser: {},
-  error: {},
+  currentUser: false,
+  error: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -16,6 +16,7 @@ export default (state = INITIAL_STATE, action) => {
     case SIGN_IN_ERROR:
       return {
         ...state,
+        currentUser: false,
         error: action.payload,
       };
     case SIGN_OUT:

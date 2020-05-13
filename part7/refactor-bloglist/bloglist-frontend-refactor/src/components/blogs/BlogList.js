@@ -1,23 +1,13 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchBlogs,
-  setNotification,
-  likeBlog,
-  deleteBlog,
-} from "../../actions";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { setNotification, likeBlog, deleteBlog } from "../../actions";
 import Blog from "./Blog";
+
 // import PropTypes from "prop-types";
 
-const BlogList = () => {
+const BlogList = ({ blogs }) => {
   const dispatch = useDispatch();
-  const blogs = useSelector((state) => state.blogs);
 
-  useEffect(() => {
-    (async () => {
-      dispatch(fetchBlogs());
-    })();
-  }, [dispatch]);
   const showHideNotification = (type, message) => {
     dispatch(setNotification(type, message, 5));
   };
