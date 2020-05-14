@@ -11,8 +11,9 @@ import {
 } from "./actions";
 
 import Landing from "./components/Landing";
-import Dashboard from "./components/Dashboard";
+import UsersView from "./components/UsersView";
 import BlogsView from "./components/BlogsView";
+import UserBlogs from "./components/users/UserBlogs";
 import "./App.css";
 
 function App() {
@@ -117,9 +118,15 @@ function App() {
             onUserLoginInfoChange={onUserLoginInfoChange}
           />
         </Route>
-        <Route path="/users" exact>
-          <Dashboard handleLogout={handleLogout} />
-        </Route>
+        <Route
+          path="/users"
+          exact
+          render={() => <UsersView handleLogout={handleLogout} />}
+        />
+        <Route
+          path="/users/:id"
+          render={() => <UserBlogs handleLogout={handleLogout} />}
+        />
         <Route path="/blogs" exact>
           <BlogsView
             handleLogout={handleLogout}

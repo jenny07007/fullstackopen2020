@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const UsersList = ({ users }) => {
   const icons = ["🐙", "🍋", "🐠", "🐳", "🦁"];
@@ -11,10 +12,15 @@ const UsersList = ({ users }) => {
     <div>
       {users.map((user) => (
         <div className="blog-style" key={user.id}>
-          <div className="blog-list-title">
-            <span> username {renderIcons(icons)} </span>
-            {user.username}
-            <span> - Blogs Created: {user.blogs.length}</span>
+          <div>
+            <span className="blog-span"> username {renderIcons(icons)} </span>
+            <Link to={`/users/${user.username}`} className="blog-list-title">
+              {user.username}
+            </Link>
+            <span className="blog-span">
+              {" "}
+              - Blogs Created: {user.blogs.length}
+            </span>
           </div>
         </div>
       ))}

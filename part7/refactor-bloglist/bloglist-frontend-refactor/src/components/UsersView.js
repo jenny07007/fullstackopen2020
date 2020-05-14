@@ -6,7 +6,7 @@ import Notification from "./Notification";
 import { fetchUsers } from "../actions";
 import UsersList from "./users/UsersList";
 
-const Dashboard = ({ handleLogout }) => {
+const UsersView = ({ handleLogout }) => {
   // update state immediately
   const auth = useSelector(({ auth }) => auth);
   // const store = useStore();
@@ -48,4 +48,4 @@ const Dashboard = ({ handleLogout }) => {
   );
 };
 
-export default Dashboard;
+export default UsersView;

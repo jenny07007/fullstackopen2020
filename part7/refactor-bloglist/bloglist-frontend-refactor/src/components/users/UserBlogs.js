@@ -1,24 +1,17 @@
 import React, { useEffect } from "react";
 import { useStore } from "react-redux";
-import { NavLink } from "react-router-dom";
-import BlogList from "./blogs/BlogList";
-import BlogForm from "./blogs/BlogForm";
-import BlogFormHeader from "./blogs/BlogFormHeader";
+import { NavLink, useParams, Link } from "react-router-dom";
+import UserBlogList from "../users/UserBlogList";
+import BlogFormHeader from "../blogs/BlogFormHeader";
 import { useSelector, useDispatch } from "react-redux";
-import Notification from "./Notification";
-import Togglable from "./Togglable";
-import { fetchBlogs } from "../actions";
+import { fetchBlogs } from "../../actions";
+import Notification from "../Notification";
 
-const Dashboard = ({
-  handleLogout,
-  onNewblogChange,
-  onAddNewBlog,
-  newBlog,
-}) => {
+const UserBlogs = ({ handleLogout }) => {
   // update state immediately
   const auth = useSelector(({ auth }) => auth);
   const blogs = useSelector(({ blogs }) => blogs);
-
+  const name = useParams().id;
   const store = useStore();
   const currentUser = store.getState().auth.currentUser;
 
@@ -45,23 +38,16 @@ const Dashboard = ({
           Blogs
         </NavLink>
       </nav>
-      <div style={{ marginTop: "2rem" }}>
-        {/* ref={blogFormRef} */}
-        <Notification />
-        <Togglable buttonLabel="New Blog">
-          <BlogForm
-            onNewblogChange={onNewblogChange}
-            onAddNewBlog={onAddNewBlog}
-            newBlog={newBlog}
-          />
-        </Togglable>
-      </div>
+      <Notification />
       <div>
-        <h2>All Blogs</h2>
-        <BlogList blogs={blogs} />
+        <h2>{name}'s Blogs</h2>
+        <UserBlogList blogs={blogs} />
       </div>
+      <h2 style={{ margin: "0 auto" }}>
+        <Link to="/users">back to users</Link>
+      </h2>
     </div>
   );
 };
 
-export default Dashboard;
+export default UserBlogs;
