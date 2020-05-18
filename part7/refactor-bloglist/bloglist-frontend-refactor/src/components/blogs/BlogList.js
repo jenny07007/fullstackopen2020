@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 import { setNotification, likeBlog, deleteBlog } from "../../actions";
 import Blog from "./Blog";
 
-// import PropTypes from "prop-types";
-
 const BlogList = ({ blogs }) => {
   const dispatch = useDispatch();
 
@@ -68,11 +66,5 @@ const BlogList = ({ blogs }) => {
     </>
   );
 };
-
-// BlogList.propTypes = {
-//   blogs: PropTypes.array.isRequired,
-//   onHandleLikes: PropTypes.func.isRequired,
-//   onHandleRemove: PropTypes.func.isRequired,
-// };
 
 export default BlogList;

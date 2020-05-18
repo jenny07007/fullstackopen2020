@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const LoginForm = ({ handleLogin, userLoginInfo, onUserLoginInfoChange }) => {
   return (
@@ -27,12 +26,6 @@ const LoginForm = ({ handleLogin, userLoginInfo, onUserLoginInfoChange }) => {
       </button>
     </form>
   );
-};
-
-LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-  onUserLoginInfoChange: PropTypes.func.isRequired,
-  userLoginInfo: PropTypes.object.isRequired
 };
 
 export default LoginForm;

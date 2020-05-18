@@ -1,14 +1,12 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setNotification, likeBlog, deleteBlog } from "../../actions";
 import Blog from "../blogs/Blog";
-import { useParams } from "react-router-dom";
-
-// import PropTypes from "prop-types";
 
 const UserBlogList = ({ blogs }) => {
   const dispatch = useDispatch();
-  const name = useParams().id;
+  const name = useParams().user;
 
   const showHideNotification = (type, message) => {
     dispatch(setNotification(type, message, 5));
@@ -72,11 +70,5 @@ const UserBlogList = ({ blogs }) => {
     </>
   );
 };
-
-// BlogList.propTypes = {
-//   blogs: PropTypes.array.isRequired,
-//   onHandleLikes: PropTypes.func.isRequired,
-//   onHandleRemove: PropTypes.func.isRequired,
-// };
 
 export default UserBlogList;

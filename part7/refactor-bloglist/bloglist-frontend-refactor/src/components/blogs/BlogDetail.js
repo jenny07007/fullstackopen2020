@@ -1,12 +1,7 @@
 import React, { useImperativeHandle } from "react";
-import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
-// eslint-disable-next-line react/display-name
+
 const BlogDetail = React.forwardRef(
   ({ blog, visible, setVisible, onHandleLikes, onHandleRemove }, ref) => {
-    const auth = useSelector((state) => state.auth);
-    if (!auth) return;
-
     const showStyle = {
       display: visible ? "" : "none",
       lineHeight: "1.8",
@@ -17,6 +12,7 @@ const BlogDetail = React.forwardRef(
     const toggleVisibility = () => setVisible(!visible);
     useImperativeHandle(ref, () => ({ toggleVisibility }));
 
+    // ISSUE: userBlog disappears when clicking like
     return (
       <div className="blog-list-showStyle" style={showStyle}>
         <li className="blog-list url">
@@ -28,7 +24,7 @@ const BlogDetail = React.forwardRef(
             <i className="fas fa-heart"></i>
           </button>
         </li>
-        <li className="blog-list user-name">{`addd by ${auth.currentUser.username}`}</li>
+        <li className="blog-list user-name">{`addd by ${blog.user.username}`}</li>
         <button onClick={onHandleRemove} className="delete-btn">
           Delete
         </button>
@@ -36,13 +32,5 @@ const BlogDetail = React.forwardRef(
     );
   }
 );
-
-BlogDetail.propTypes = {
-  blog: PropTypes.object.isRequired,
-  visible: PropTypes.bool.isRequired,
-  setVisible: PropTypes.func.isRequired,
-  onHandleLikes: PropTypes.func.isRequired,
-  onHandleRemove: PropTypes.func.isRequired,
-};
 
 export default BlogDetail;

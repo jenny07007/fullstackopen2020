@@ -11,12 +11,10 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentUser: action.payload,
-        error: null,
       };
     case SIGN_IN_ERROR:
       return {
         ...state,
-        currentUser: false,
         error: action.payload,
       };
     case SIGN_OUT:

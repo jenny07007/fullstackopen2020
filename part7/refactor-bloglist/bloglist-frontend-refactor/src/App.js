@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Route, Switch, useHistory, Link } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 
 import {
   signIn,
@@ -17,13 +17,11 @@ import UserBlogs from "./components/users/UserBlogs";
 import "./App.css";
 
 function App() {
-  // const blogs = useSelector((state) => state.blogs);
   const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
   const [userLoginInfo, setUserLoginInfo] = useState({
     username: "",
     password: "",
   });
-  // const blogFormRef = React.createRef();
   const auth = useSelector(({ auth }) => auth);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -58,13 +56,13 @@ function App() {
     if (!username || !password) {
       return showHideNotification("Error!", "incorrect username or password!");
     }
+
     try {
       dispatch(signIn({ username, password }));
-
       setUserLoginInfo({ username: "", password: "" });
-      history.push("/users");
+      history.go("/users");
     } catch (error) {
-      return showHideNotification("Error!", `${auth.error}`);
+      showHideNotification("Error!", `${error}`);
     }
   };
 
@@ -87,8 +85,6 @@ function App() {
 
   const onAddNewBlog = async (e) => {
     e.preventDefault();
-
-    // blogFormRef.current.toggleVisibility();
 
     const { title, author, url } = newBlog;
     try {
@@ -124,7 +120,7 @@ function App() {
           render={() => <UsersView handleLogout={handleLogout} />}
         />
         <Route
-          path="/users/:id"
+          path="/users/:user"
           render={() => <UserBlogs handleLogout={handleLogout} />}
         />
         <Route path="/blogs" exact>
