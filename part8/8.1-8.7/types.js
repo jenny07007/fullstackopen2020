@@ -13,13 +13,13 @@ exports.typeDefs = gql`
     published: Int!
     author: String!
     id: ID!
-    genre: [String]!
+    genres: [String]!
   }
 
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allbooks(author: String, genre: String): [Book]!
+    allbooks(author: String, genres: String): [Book]!
     allAuthors: [Author]!
   }
 
@@ -28,7 +28,7 @@ exports.typeDefs = gql`
       title: String!
       author: String!
       published: Int!
-      genre: [String!]!
+      genres: [String!]!
     ): Book
     editAuthor(name: String!, setBornTo: Int!): Author
   }

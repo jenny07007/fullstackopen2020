@@ -26,6 +26,123 @@ const server = new ApolloServer({
   fieldName(obj, args, context, info) { result }
 ```
 
+#
+
+### React and GraphQL
+
+- [Apollo Client](https://www.apollographql.com/docs/react/)
+
+```js
+npm install --save @apollo/client graphql
+```
+
+```js
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: "http://localhost:4000",
+  }),
+});
+```
+
+- [usequery](https://www.apollographql.com/docs/react/v3.0-beta/api/react/hooks/#usequery) - well suited for the query is done when the component is rendered
+- [graphql fields](https://www.apollographql.com/docs/react/v3.0-beta/api/react/hooks/#result)
+- [uselazyquery](https://www.apollographql.com/docs/react/v3.0-beta/api/react/hooks/#uselazyquery) - for the situations where the query is done only as required
+- [graphql variables](https://graphql.org/learn/queries/#variables)
+- [usemutation](https://www.apollographql.com/docs/react/v3.0-beta/api/react/hooks/#usemutation)
+- [localstate to Apollo Cache](https://www.apollographql.com/docs/react/v3.0-beta/data/local-state/)
+
+```js
+query findPerson($nameToSearch: String!) {
+findPerson(name: $nameToSearch) {
+  phone
+  address {
+    street,
+    city
+  }
+  }
+}
+
+// query variables
+{
+"nameToSearch": "Arto Hellas"
+}
+```
+
+- Apollo client saves the responses of queries to [cache](https://www.apollographql.com/docs/react/v3.0-beta/caching/cache-configuration/).
+
+###
+
+- **updating cache**
+
+  1. make the query for all persons [poll](https://www.apollographql.com/docs/react/v3.0-beta/data/queries/#polling) the server
+
+     - drawback: pointless web traffic
+
+     ```js
+     const reuslt = useQuery(ALL_PERSONS, {
+       pollInterval: 2000,
+     });
+     ```
+
+  2. use `useMutation` hook's [refetchQueries](https://www.apollographql.com/docs/react/v3.0-beta/api/react/hooks/#params-2)
+
+     - **Pros**: no extra web trafficm, cos queries are not done in case
+     - **Cons**: if one user now updates the state of the server, the changes do not show to other users immediately
+
+  ```js
+  const ALL_PERSONS = gql`
+    query {
+      allPersons {
+        name
+        phone
+        id
+      }
+    }
+  `;
+
+  const PersonForm = (props) => {
+    //...
+    const [createPerson] = useMuation(CREATE_PERSON, {
+      refetchQueries: [{ query: ALL_PERSONS }],
+    });
+  };
+  ```
+
+###
+
+- Handling mutation errors
+
+  - `useMutation` hook's `OnError` [option](https://www.apollographql.com/docs/react/v3.0-beta/api/react/hooks/#params-2)
+
+  ```js
+  const [createPerson] = useMutation(CREATE_PERSON, {
+    refetchQueries: [{ query: ALL_PERSONS }],
+    onError: (error) => setError(error.graphQLError[0].message),
+  });
+
+  // render the error message
+  const App = () => {
+    const [errorMessage, setErrorMessage] = useState(null)
+    //...
+    const notify = msg => {
+      setErrorMessage(msg)
+      setTimeout(() => setErrorMessage(null), 10000)
+    },
+    return {//...}
+
+    // The error message component
+    const Notify = ({ errorMessage }) => {
+      if (!errorMessage) return null;
+      return (
+        <div style={{ color: 'red' }}>
+          {errorMessage}
+        </div>
+      )
+    }
+  }
+  ```
+
 # Exercises
 
 - 8.1 - 8-7
@@ -38,3 +155,18 @@ const server = new ApolloServer({
   - Implement mutation `editAuthor`, which can be used to set a birth year for an author.
     - if the correct author is found, returns the edited authr
     - if the author is not found, returns `null`
+
+#
+
+- 8.8 - 8.12
+  - Authors view
+    - Implement an Authors view to show the details of all authors on a page
+  - Books view
+    - Implement a Books view to show on a page all other details of all books except their genres.
+  - Adding a book
+    - Implement a possibility to add new books to your application.
+    - Make sure that the Authors and Books views are kept up to date after a new book is added.
+  - Authors birth year
+    - Implement a possibility to set authors birth year.
+  - Authors birth year advanced
+    - Change the birth year form so that a birth year can be set only for an existing author. Use select-tag, react-select library or some other mechanism.
