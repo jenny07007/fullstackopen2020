@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { EDIT_AUTHOR, ALL_AUTHORS } from "./queries";
 
-const EditAuthor = () => {
+const EditAuthor = ({ authors, setError }) => {
   const [name, setName] = useState("");
   const [setBornTo, setYear] = useState("");
 
@@ -12,9 +12,10 @@ const EditAuthor = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
+    if (!name || !setBornTo) {
+      return setError("year is empty");
+    }
     editAuthor({ variables: { name, setBornTo } });
-
     setName("");
     setYear("");
   };
@@ -24,16 +25,20 @@ const EditAuthor = () => {
       <h2>Set Birth Year</h2>
       <form onSubmit={onSubmit}>
         <div>
-          name{" "}
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          name
+          <select onChange={({ target }) => setName(target.value)}>
+            {authors.map((author) => (
+              <option key={author.id} value={author.name}>
+                {author.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           born{" "}
           <input
-            value={setBornTo}
+            type="string"
+            value={setBornTo ? setBornTo : ""}
             onChange={({ target }) => setYear(parseInt(target.value))}
           />
         </div>

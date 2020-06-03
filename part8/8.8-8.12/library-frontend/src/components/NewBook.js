@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ALL_BOOKS, ADD_BOOK, ALL_AUTHORS } from "./queries";
+import Notify from "./Notify";
 
 const NewBook = ({ show, setError }) => {
+  const [errorMessage, setErrorMessage] = useState(null);
   const [title, setTitle] = useState("");
   const [author, setAuhtor] = useState("");
   const [published, setPublished] = useState("");
@@ -16,10 +18,15 @@ const NewBook = ({ show, setError }) => {
 
   if (!show) return null;
 
+  const notify = (msg) => {
+    setErrorMessage(msg);
+    setTimeout(() => setErrorMessage(null), 3000);
+  };
+
   const submit = async (event) => {
     event.preventDefault();
     if (!genres.length) {
-      return setError("Please provide at least one genre");
+      return notify("Please provide at least one genre");
     }
 
     addBook({ variables: { title, author, published, genres } });
@@ -39,6 +46,7 @@ const NewBook = ({ show, setError }) => {
 
   return (
     <div>
+      <Notify errorMessage={errorMessage} />
       <form onSubmit={submit}>
         <div>
           title
@@ -55,11 +63,11 @@ const NewBook = ({ show, setError }) => {
           />
         </div>
         <div>
-          published
+          published (year)
           <input
-            type="number"
-            value={published}
-            onChange={({ target }) => setPublished(Number(target.value))}
+            type="type"
+            value={published ? published : ""}
+            onChange={({ target }) => setPublished(parseInt(target.value))}
           />
         </div>
         <div>

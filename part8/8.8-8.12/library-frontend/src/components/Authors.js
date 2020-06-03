@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import EditAuthor from "./EditAuthor";
-const Authors = ({ authors, show }) => {
-  if (!show) return null;
+import Notify from "./Notify";
 
+const Authors = ({ authors, show }) => {
+  const [errorMessage, setErrorMessage] = useState(null);
+  if (!show) return null;
+  const notify = (msg) => {
+    setErrorMessage(msg);
+    setTimeout(() => setErrorMessage(null), 3000);
+  };
   return (
     <div>
+      <Notify errorMessage={errorMessage} />
       <h2>authors</h2>
       <table>
         <tbody>
@@ -22,7 +29,7 @@ const Authors = ({ authors, show }) => {
           ))}
         </tbody>
       </table>
-      <EditAuthor />
+      <EditAuthor authors={authors} setError={notify} />
     </div>
   );
 };
