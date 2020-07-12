@@ -143,6 +143,16 @@ findPerson(name: $nameToSearch) {
   }
   ```
 
+### Database and user administration
+
+- mongoose and apollo
+
+```js
+npm install mongoose mongoose-unique
+```
+
+-
+
 # Exercises
 
 - 8.1 - 8-7
@@ -170,3 +180,11 @@ findPerson(name: $nameToSearch) {
     - Implement a possibility to set authors birth year.
   - Authors birth year advanced
     - Change the birth year form so that a birth year can be set only for an existing author. Use select-tag, react-select library or some other mechanism.
+
+#
+
+- 8.13 - 8.16
+  - change the library application saving the data to a database
+  - complete the program and make all queries and mutations work
+  - complete the program and handle validation errors
+  - add user management to the app
