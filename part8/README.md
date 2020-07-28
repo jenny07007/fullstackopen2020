@@ -148,10 +148,69 @@ findPerson(name: $nameToSearch) {
 - mongoose and apollo
 
 ```js
-npm install mongoose mongoose-unique
+npm install mongoose mongoose-unique-validator
 ```
 
--
+### User login
+
+- every user has a friend list that only they can see
+
+```gql
+type User {
+  username: String!
+  friends: [Person!]!
+  id: ID!
+}
+
+type Token {
+  value: String!
+}
+
+type Query {
+  // ..
+  me: User
+}
+
+type Mutation {
+  // ...
+  createUser(
+    username: String!
+  ): User
+  login(
+    username: String!
+    password: String!
+  ): Token
+}
+```
+
+### context
+
+- the object returned by context is given to all resolvers as their third parameter
+- context is the right place to do things which are shared by multiple resolvers, like [user identification](https://blog.apollographql.com/authorization-in-graphql-452b1c402a9?_ga=2.45656161.474875091.1550613879-1581139173.1549828167).
+- in this case, the code sets the object corresponding to the user who made a request to the `currentUsr` field of the context. If there is no user made requests, the value of the `context` is undefined
+
+```js
+exports.context = async ({ req }) => {
+  const auth = req ? req.headers.authorization : null;
+
+  if (auth && auth.toLowerCase().startsWith("bearer ")) {
+    const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET);
+    const currentUser = await User.findById(decodedToken.id).populate(
+      "friends"
+    );
+    return { currentUser };
+  }
+};
+```
+
+```js
+Query: {
+  // ...
+  me: (root, args, { currentUser }) => {
+    return currentUser
+  }
+},
+```
 
 # Exercises
 
