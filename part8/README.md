@@ -212,6 +212,68 @@ Query: {
 },
 ```
 
+### login and update cache - frontend
+
+- [resetStore](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.resetStore) - resets the entire store by clearing out cache and re-executing all active queries.
+- [useApolloClient](https://www.apollographql.com/docs/react/api/react/hooks/#useapolloclient) - to access client
+
+### add a token to a header
+
+- the link parameter given to the `client` object defines who apollo connects to the server
+
+- [httpLink](https://www.apollographql.com/docs/link/links/http/)
+- [header](https://www.apollographql.com/docs/react/networking/authentication/#header)
+
+```bash
+npm install apollo-link-context
+```
+
+```js
+import { setContext } from "apollo-link-context";
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem("phonenumbers-user-token");
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `bearer ${token}` : null,
+    },
+  };
+});
+
+const HttpLink = new HttpLink({ uri: "http://localhost:4000" });
+```
+
+### a better solution for updating cache
+
+- [writeQuery](https://www.apollographql.com/docs/react/caching/cache-interaction/#writequery-and-writefragment)
+- [readQuery](https://www.apollographql.com/docs/react/v3.0-beta/caching/cache-interaction/#readquery)
+- [fetchPolicy](https://www.apollographql.com/docs/react/api/react-apollo/#optionsfetchpolicy)
+
+###
+
+- the callback function is given a reference to the cache and the data returned by the mutation as parameters.
+- it's possible to disable cache for the wholw app or single queries [fetchPolicy](https://www.apollographql.com/docs/react/api/react/hooks/#options) as `no-cache`
+
+```js
+const [createPerson] = useMutation(CREATE_PERSON, {
+  refetchQueries: [{ query: ALL_PERSONS }],
+  onError: (error) => setError(error.graphQLErrors[0].message), // handling error
+  update: (store, response) => {
+    // a suitable update callback
+    const dataInStore = store.readQuery({ query: ALL_PERSONS }); // reads the cached state
+    store.writeQuery({
+      // updates the cache adding the new person to the cached data
+      query: ALL_PERSONS,
+      data: {
+        ...dataInStore,
+        allPersons: [...dataInStore.allPersons, response.data.addPerson],
+      },
+    });
+  },
+});
+```
+
 # Exercises
 
 - 8.1 - 8-7
@@ -247,3 +309,17 @@ Query: {
   - complete the program and make all queries and mutations work
   - complete the program and handle validation errors
   - add user management to the app
+
+#
+
+- 8.17 - 8.22
+  - config with backend that updated from 8.13-8.16
+  - implement login functionality and fix the mutations.
+  - filtering the book list by genre
+  - show a view that all books are based the logged in user's favourite genres
+  - filtering books in the recommendations page using a GraphQL query to the server
+    - might consider use the `useLazyQuery` rather than `useQuery` hook
+    - might useful to save the results of a GQL query to the state of a component
+    - can do GQL queries in a `useEffect` hook
+    - the second parameter of `useEffect` hook can become handy depending on apporaches
+  - up to date cache and book recommendatiions
