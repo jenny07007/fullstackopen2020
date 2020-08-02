@@ -253,7 +253,7 @@ const HttpLink = new HttpLink({ uri: "http://localhost:4000" });
 ###
 
 - the callback function is given a reference to the cache and the data returned by the mutation as parameters.
-- it's possible to disable cache for the wholw app or single queries [fetchPolicy](https://www.apollographql.com/docs/react/api/react/hooks/#options) as `no-cache`
+- it's possible to disable cache for the whole app or a single query [fetchPolicy](https://www.apollographql.com/docs/react/api/react/hooks/#options) as `no-cache`
 
 ```js
 const [createPerson] = useMutation(CREATE_PERSON, {
@@ -319,7 +319,7 @@ const [createPerson] = useMutation(CREATE_PERSON, {
   - show a view that all books are based the logged in user's favourite genres
   - filtering books in the recommendations page using a GraphQL query to the server
     - might consider use the `useLazyQuery` rather than `useQuery` hook
-    - might useful to save the results of a GQL query to the state of a component
+    - might be useful to save the results of a GQL query to the state of a component
     - can do GQL queries in a `useEffect` hook
     - the second parameter of `useEffect` hook can become handy depending on apporaches
   - up to date cache and book recommendatiions
