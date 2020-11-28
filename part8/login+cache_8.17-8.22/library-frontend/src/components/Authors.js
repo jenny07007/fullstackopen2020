@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import EditAuthor from "./EditAuthor";
 import Notify from "./Notify";
 
-const Authors = ({ authors, show }) => {
+const Authors = ({ authors, show, token }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   if (!show) return null;
   const notify = (msg) => {
@@ -29,7 +29,7 @@ const Authors = ({ authors, show }) => {
           ))}
         </tbody>
       </table>
-      <EditAuthor authors={authors} setError={notify} />
+      {token && <EditAuthor authors={authors} setError={notify} />}
     </div>
   );
 };

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "./queries";
 
-const LoginForm = ({ setToken, setError }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({ setToken, setError, show, setPage }) => {
+  const [username, setUsername] = useState("helloworld");
+  const [password, setPassword] = useState("helloworld");
 
   const [login, result] = useMutation(LOGIN, {
     onError: (err) => setError(err.graphQLErrors[0].message),
@@ -21,10 +21,14 @@ const LoginForm = ({ setToken, setError }) => {
   const handleSumit = async (e) => {
     e.preventDefault();
     login({ variables: { username, password } });
+    setPage("books");
   };
+
+  if (!show) return null;
 
   return (
     <div>
+      <h2>Login</h2>
       <form onSubmit={handleSumit}>
         <div>
           username
