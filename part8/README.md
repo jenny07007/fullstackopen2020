@@ -315,8 +315,9 @@ const ALL_PERSONS = gql`
 - [PubSub interface](https://www.apollographql.com/docs/graphql-subscriptions/setup/#setup)
 - [iterator object](https://www.apollographql.com/docs/graphql-subscriptions/subscriptions-to-schema/)
 
+- on the server
+
 ```js
-// on the server
 type Subscription {
   personAdded: Person!
 }
@@ -345,7 +346,7 @@ Mutation: {
   console.log(`Subscriptions ready at ${subscriptionsUrl}`)})
 ```
 
-// on the client
+- on the client
 
 ```js
 // index.js
@@ -404,7 +405,9 @@ import {
 const App = () => {
   // ...
 
+  // render view immediately as a person is added to Apollo cache
   const updateCacheWith = (addedPerson) => {
+    // ensure not add the new person to the cache twice
     const includedIn = (set, object) =>
       set.map((p) => p.id).includes(object.id);
 
@@ -418,6 +421,7 @@ const App = () => {
   };
 
   useSubscription(PERSON_ADDED, {
+    // When a new person is added, the server sends a notification to the client, and the callback-function defined in the onSubscriptionData attribute is called and given the details of the new person as parameters.
     onSubscriptionData: ({ subscriptionData }) => {
       const addedPerson = subscriptionData.data.personAdded;
       notify(`${addedPerson.name} added`);

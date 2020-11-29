@@ -17,7 +17,7 @@ const Recommend = ({ show }) => {
     }
   }, [getRecommendation, favGen]);
 
-  console.log(recBooksData);
+  // console.log(recBooksData);
 
   const renderTable = (b) => (
     <tr key={b.title}>

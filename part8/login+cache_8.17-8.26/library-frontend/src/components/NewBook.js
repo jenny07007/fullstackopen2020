@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { ALL_BOOKS, ADD_BOOK, ALL_AUTHORS } from "./queries";
 import Notify from "./Notify";
 
-const NewBook = ({ show, setError }) => {
+const NewBook = ({ show, setError, updateCacheWith }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [title, setTitle] = useState("");
   const [author, setAuhtor] = useState("");
@@ -14,6 +14,7 @@ const NewBook = ({ show, setError }) => {
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => setError(error.graphQLErrors[0].message),
+    update: (store, response) => updateCacheWith(response.data.addBook),
   });
 
   if (!show) return null;
