@@ -4,7 +4,6 @@ import { ALL_BOOKS, FAVOURITE_GENRE } from "./queries";
 
 const Recommend = ({ show }) => {
   const { loading, data: favGen } = useQuery(FAVOURITE_GENRE);
-
   const [
     getRecommendation,
     { loading: recBooksLoading, data: recBooksData },

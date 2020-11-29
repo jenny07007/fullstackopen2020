@@ -274,6 +274,183 @@ const [createPerson] = useMutation(CREATE_PERSON, {
 });
 ```
 
+### Fragments
+
+- [fragments](https://graphql.org/learn/queries/#fragments)
+- constructs sets of fields and includes them in queries where needed
+- The fragments are not defined in the GraphQL schema, but in the client
+- The fragments must be declared when the client uses them for queries.
+
+```js
+const PERSON_DETAILS = gql`
+  fragment PersonDetails on Person {
+    id
+    name
+    phone
+    address {
+      street
+      city
+    }
+  }
+`;
+
+//
+const ALL_PERSONS = gql`
+  {
+    allPersons {
+      ...PersonDetails
+    }
+  }
+  ${PERSON_DETAILS}
+`;
+```
+
+### Subscriptions
+
+- [subscriptions](https://www.apollographql.com/docs/react/data/subscriptions/)
+- [WebSockets ](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
+- subscribe to updates about changes in the server
+
+- [Publish–subscribe pattern](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern)
+- [PubSub interface](https://www.apollographql.com/docs/graphql-subscriptions/setup/#setup)
+- [iterator object](https://www.apollographql.com/docs/graphql-subscriptions/subscriptions-to-schema/)
+
+```js
+// on the server
+type Subscription {
+  personAdded: Person!
+}
+
+//
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
+
+Mutation: {
+  addPerson: async (root, args, context) => {
+    //...
+  }
+  // publishes a notification about the operation to all subscribers with PubSub's method `publish`
+  pubsub.publish('PERSON_ADDED', { personAdded: person })
+  return person
+ }
+},
+ Subscription: {
+   personAdded: {
+     subscribe: () => pubsub.asyncIterator(['PERSON_ADDED'])
+     },
+  },
+
+  // server listens for subscriptions in the address ws://localhost:4000/graphql
+  server.listen().then(({ url, subscriptionsUrl }) => {  console.log(`Server ready at ${url}`)
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`)})
+```
+
+// on the client
+
+```js
+// index.js
+import { split } from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { WebSocketLink } from "@apollo/client/link/ws";
+
+// WebSocket connection
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:4000/graphql`,
+  options: {
+    reconnect: true,
+  },
+});
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  authLink.concat(httpLink)
+);
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: splitLink,
+});
+```
+
+```
+npm install @apollo/client subscriptions-transport-ws
+```
+
+```js
+// queryies
+export const PERSON_ADDED = gql`
+  subscription {
+    personAdded {
+      ...PersonDetails
+    }
+  }
+  ${PERSON_DETAILS}
+`;
+
+//App.js
+import {
+  useQuery,
+  useMutation,
+  useSubscription,
+  useApolloClient,
+} from "@apollo/client";
+
+const App = () => {
+  // ...
+
+  const updateCacheWith = (addedPerson) => {
+    const includedIn = (set, object) =>
+      set.map((p) => p.id).includes(object.id);
+
+    const dataInStore = client.readQuery({ query: ALL_PERSONS });
+    if (!includedIn(dataInStore.allPersons, addedPerson)) {
+      client.writeQuery({
+        query: ALL_PERSONS,
+        data: { allPersons: dataInStore.allPersons.concat(addedPerson) },
+      });
+    }
+  };
+
+  useSubscription(PERSON_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedPerson = subscriptionData.data.personAdded;
+      notify(`${addedPerson.name} added`);
+      updateCacheWith(addedPerson);
+    },
+  });
+};
+
+// the 'updateCacheWith' can also be used in other components for the cache update
+const PersonForm = ({ setError, updateCacheWith }) => {
+  // ...
+  const [createPerson] = useMutation(CREATE_PERSON, {
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message);
+    },
+    update: (store, response) => {
+      updateCacheWith(response.data.addPerson);
+    },
+  });
+  // ..
+};
+```
+
+### n + 1 problem
+
+- [dataloader](https://github.com/graphql/dataloader)
+- Dataloader with Apollo server [here](https://www.robinwieruch.de/graphql-apollo-server-tutorial#graphql-server-data-loader-caching-batching) and [here](http://www.petecorey.com/blog/2017/08/14/batching-graphql-queries-with-dataloader/)
+
+### structures of GraphQL applications
+
+- [server](https://www.apollographql.com/blog/modularizing-your-graphql-schema-code-d7f71d5ed5f2/)
+- [client](https://medium.com/@peterpme/thoughts-on-structuring-your-apollo-queries-mutations-939ba4746cd8)
+
 # Exercises
 
 - 8.1 - 8-7
@@ -313,6 +490,7 @@ const [createPerson] = useMutation(CREATE_PERSON, {
 #
 
 - 8.17 - 8.22
+
   - config with backend that updated from 8.13-8.16
   - implement login functionality and fix the mutations.
   - filtering the book list by genre
@@ -323,3 +501,18 @@ const [createPerson] = useMutation(CREATE_PERSON, {
     - can do GQL queries in a `useEffect` hook
     - the second parameter of `useEffect` hook can become handy depending on apporaches
   - up to date cache and book recommendatiions
+
+- 8.23 - 8.26
+  - implement subscription `bookAdded` on server, and returns the details of all new books to its subscribers
+  - subscribe to `bookAdded` in the client.
+    - when new books are added, show a notification to the user
+  - keep the application's view updating when the server notifies there is a new book has been added
+  - solve the `n+1` problem
+    ```js
+    query {
+      allAuthors {
+        name
+        bookCount
+      }
+    }
+    ```
