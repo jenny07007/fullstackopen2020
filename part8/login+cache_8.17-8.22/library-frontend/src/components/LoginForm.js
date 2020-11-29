@@ -23,7 +23,6 @@ const LoginForm = ({ setToken, setError, show, setPage }) => {
     login({ variables: { username, password } });
     setPage("books");
   };
-
   if (!show) return null;
 
   return (

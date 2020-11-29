@@ -7,7 +7,7 @@ import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
 import Notify from "./components/Notify";
 
-import { ALL_AUTHORS, ALL_BOOKS, ME } from "./components/queries";
+import { ALL_AUTHORS, ALL_BOOKS } from "./components/queries";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -16,11 +16,10 @@ const App = () => {
 
   const resultAuthors = useQuery(ALL_AUTHORS);
   const resultBooks = useQuery(ALL_BOOKS);
-  const me = useQuery(ME);
 
   const client = useApolloClient();
 
-  if (resultAuthors.loading || resultBooks.loading || me.loading)
+  if (resultAuthors.loading || resultBooks.loading)
     return <div>Loading...</div>;
 
   const logout = () => {
@@ -35,8 +34,7 @@ const App = () => {
     setTimeout(() => setErrorMessage(null), 5000);
   };
 
-  console.log(me);
-  return (
+  return resultBooks.loading ? null : (
     <div>
       <div>
         <button onClick={() => setPage("authors")}>authors</button>
@@ -62,11 +60,7 @@ const App = () => {
 
       <NewBook show={page === "add"} setError={notify} />
 
-      <Recommend
-        show={page === "recommend"}
-        books={resultBooks.data.allBooks}
-        favoriteGenre={me?.data.me?.favoriteGenre}
-      />
+      <Recommend show={page === "recommend"} />
 
       {!token && (
         <div>
