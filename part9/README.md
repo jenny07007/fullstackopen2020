@@ -44,6 +44,19 @@ type Operation = "multiply" | "add" | "divide";
 npm install --save-dev @types/node
 ```
 
+### use express
+
+- [ TypeScript modules](https://www.typescriptlang.org/docs/handbook/modules.html)
+
+```js
+npm i express
+npm install --save-dev @types/express
+npm install --save-dev ts-node-dev  // for auto reloading
+
+// index.ts
+import express from 'express';
+```
+
 # Exercises
 
 - 9.1 - 9.7
@@ -90,3 +103,5 @@ npm install --save-dev @types/node
   target: 2,
   average: 1.7222222222222223 }
   ```
+
+  - Add an endpoint for BMI-calculator that can be used by doing a HTTP GET request to endpoint bmi and specifying the input with query string parameters. For example to get bmi for a person having height 180 and weight 72, the url is `http://localhost:3002/bmi?height=180&weight=72`
