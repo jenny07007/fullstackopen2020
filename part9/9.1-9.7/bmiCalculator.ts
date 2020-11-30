@@ -1,21 +1,23 @@
-export const calculateBmi = (h: number, w: number) => {
+export const calculateBmi = (h: number, w: number):string => {
   const bmi = w / (h/100) ** 2;
   if (bmi < 18.5) {
     // console.log("Underweight")
-    return "Underweight"
+    return "Underweight";
   } else if (bmi >= 18.5 && bmi < 25) {
     // console.log("Normal (Healthy Weight)")
-    return "Normal (Healthy Weight)"
+    return "Normal (Healthy Weight)";
   } else if (bmi >= 25 && bmi < 30) {
     // console.log("Overweight")
-    return "Overweight"
+    return "Overweight";
   } else {
     // console.log("Obese")
-    return "Obese"
+    return "Obese";
   }
-}
+};
 
-const h: number = Number(process.argv[2])
-const v: number = Number(process.argv[3])
+/*
+const h: number = Number(process.argv[2]);
+const v: number = Number(process.argv[3]);
 
-calculateBmi(h, v)
+calculateBmi(h, v);
+*/
