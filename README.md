@@ -102,3 +102,10 @@
 - Database and user administration
 - Login and updating the cache
 - Fragments and subscriptions
+
+### Part 9
+
+- Introduction
+- First step with Typescript
+- Typing th express app
+- React with types
