@@ -107,5 +107,5 @@
 
 - Introduction
 - First step with Typescript
-- Typing th express app
+- Typing the express app
 - React with types
