@@ -176,6 +176,105 @@ b instanceof String; --> returns true
 
 #
 
+### Working with react
+
+- [generic type](https://www.typescriptlang.org/docs/handbook/generics.html)
+- [intersection type](https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types)
+
+```
+npx create-react-app my-app --template typescript
+```
+
+- the type declarations for `React.FC` and `React.FunctionComponent`
+
+```js
+// 'FC' is simply an alias for the FunctionComponent interface
+// They are both generic, which can easily be recognized by the angle bracket <> after the type name.
+type FC<P = {}> = FunctionComponent<P>;
+
+interface FunctionComponent<P = {}> {
+  // that props is of type PropsWithChildren, which is also a generic type to which P is passed.
+  // The type PropsWithChildren in turn is an intersection of P and the type { children?: ReactNode }.
+  (props: PropsWithChildren<P>, context?: any): ReactElement | null;
+  propTypes?: WeakValidationMap<P>;
+  contextTypes?: ValidationMap<any>;
+  defaultProps?: Partial<P>;
+  displayName?: string;
+}
+
+//React component
+interface WelcomeProps {
+  name: string;
+}
+
+const Welcome: React.FC<WelcomeProps> = (props) => {
+  return <h1>Hello, {props.name}</h1>;
+};
+
+// or consice version
+const Welcome: React.FC<{ name: string }> = ({ name }) => (
+  <h1>Hello, {name}</h1>
+);
+
+// new lint rule
+{
+  // ...
+  "rules": {
+    "react/prop-types": 0,  },
+  // ...
+}
+```
+
+### type usages
+
+- exhaustive type checking
+  - if we encounter an unexpected value, we call a function that accepts a value with the type **never** and also has the return type `never`.
+
+```js
+// union type
+type CoursePart = CoursePartOne | CoursePartTwo | CoursePartThree;
+
+interface Base {}
+interface CoursePartOne extends Base {}
+interface CoursePartTwo extends Base {}
+
+/**
+ * Helper function for exhaustive type checking
+ */
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+```
+
+- error
+
+  > that Argument of type 'CoursePartThree' is not assignable to parameter of type 'never'
+
+  tells us we are using a variable somewhere where it should never be used. This tells us that something needs to be fixed. When we remove the comments from the Deeper type usage case block, you will see that the error goes away.
+
+### interface and type alias
+
+- if you define multiple interfaces with the same name, they will result in a merged interface, whereas if you try to define multiple types with the same name, it will result in an error stating that a type with the same name is already declared.
+- [TS doc recommends using interfaces in most cases](https://www.typescriptlang.org/docs/handbook/advanced-types.html#interfaces-vs-type-aliases)
+
+```js
+interface DiaryEntry {
+  id: number;
+  date: string;
+  // ...
+}
+
+type DiaryEntry = {
+  id: number,
+  date: string,
+  // ...
+};
+```
+
+#
+
 # Exercises
 
 - 9.1 - 9.7
@@ -243,3 +342,12 @@ b instanceof String; --> returns true
 - Create a POST-endpoint `/api/patients` for adding patients. Ensure that you can add patients also from the frontend.
 - Set up safe parsing, validation and type guards to the POST `/api/patients` reques
   - Refactor the Gender field to use an `enum` type.
+
+#
+
+- 9.14-9.27
+- Create a new Create React App with TypeScript, and set up eslint for the project
+  - refactor the code so that it consists of three components: `Header`, `Content` and `Total`.
+- Declare a new interface, that includes the description attribute and extends the CoursePartBase interface.
+- create a component `Part` that renders all attributes of each type of course part. Use a switch case-based exhaustive type checking! Use the new component in component `Content`.
+- add your own course part interface with at least the following attributes: `name`, `exerciseCount` and `description`.
