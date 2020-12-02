@@ -71,9 +71,7 @@ import express from 'express';
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ```
 
-###
-
-# typeing in the express app
+### typeing in the express app
 
 - add the `tsc` command to the list of executable scripts in the package.json file
 
@@ -158,6 +156,24 @@ const getNonSensitiveEntries = (): NonSensitiveDiaryEntry[] => {
 export default { getNonSensitiveEntries };
 ```
 
+```js
+const isString = (text: any): text is string => {
+  return typeof text === 'string' || text instanceof String;
+}
+//
+
+const a = "I'm a string primitive";
+const b = new String("I'm a String Object");
+typeof a; --> returns 'string'
+typeof b; --> returns 'object'
+a instanceof String; --> returns false
+b instanceof String; --> returns true
+```
+
+### Enum
+
+- Enums are usually used when there is a set of predetermined values which are not expected to change in the future. Usually enums are used for much tighter unchanging values (for example weekdays, months, directions)
+
 #
 
 # Exercises
@@ -208,16 +224,17 @@ export default { getNonSensitiveEntries };
     ```
 
   - Add an endpoint for BMI-calculator that can be used by doing a HTTP GET request to endpoint bmi and specifying the input with query string parameters. For example to get bmi for a person having height 180 and weight 72, the url is `http://localhost:3002/bmi?height=180&weight=72`
-  
-  -Add an endpoint for the exercise calculator that can be used by doing a HTTP POST reauest to endpoint `exercises` with the input in the request body
-    ```json
-    {
-      "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5],
-      "target": 2.5
-    }
-    ```
 
-# 9.8 - 9.13
+  -Add an endpoint for the exercise calculator that can be used by doing a HTTP POST reauest to endpoint `exercises` with the input in the request body
+
+  ```json
+  {
+    "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5],
+    "target": 2.5
+  }
+  ```
+
+- 9.8 - 9.13
 
 - Initialise project that will be used by the frontend. Configure eslint and tsconfig with the same configurations that are used in the material. Define an endpoint that responses to HTTP GET requests to route `/ping`. The project should be runnable with npm scripts both in development mode and as compiled code in production mod
 - Ensure that backend answers to the ping request that frontend has made on startup

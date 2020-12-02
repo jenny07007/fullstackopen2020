@@ -1,12 +1,18 @@
+import { v4 as uuidv4 } from 'uuid';
 import patientsData from '../../data/patients.json';
 
-import { Patient, NonSSNPatients } from '../../types';
+import { Patient, NonSSNPatients, NewPatientWithoutId } from '../../types';
 
 const patients: Array<Patient> = patientsData as Array<Patient>;
 
 // const getPatients = ():Array<Patient> => {
 //   return patients;
 // }
+
+const findById = (id: string): Patient | undefined => {
+  const entry = patients.find(d => d.id === id);
+  return entry;
+};
 
 // exclude the files we dont want to show
 const getNonSSNPatients = (): NonSSNPatients[] => {
@@ -15,9 +21,15 @@ const getNonSSNPatients = (): NonSSNPatients[] => {
   }));
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const addPatient = () => {
-  return null;
+const addPatient = (entry: NewPatientWithoutId):Patient => {
+  const idNum = uuidv4();
+  const newPatient = {
+    id: idNum.toString(),
+    ...entry
+  };
+
+  patients.push(newPatient);
+  return newPatient;
 };
 
-export default { addPatient, getNonSSNPatients };
+export default { addPatient, getNonSSNPatients, findById };
