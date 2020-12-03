@@ -1,4 +1,4 @@
-import { Gender, Patient } from "./types";
+import { Gender, Patient, Entry } from "./types";
 
 const isString = (text: any): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -33,7 +33,7 @@ const parseGender = (gender: any): Gender => {
   return gender;
 };
 
-const toPatient = (object: any): Patient => {
+export const toPatient = (object: any): Patient => {
   const newPatient: Patient = {
     name: parseToString(object.name, "name"),
     dateOfBirth: parseDate(object.dateOfBirth),
@@ -41,9 +41,16 @@ const toPatient = (object: any): Patient => {
     occupation: parseToString(object.occupation, "occupation"),
     gender: parseGender(object.gender),
     id: parseToString(object.id, "id"),
-    entries: [],
+    entries: object.entries,
   };
   return newPatient;
 };
 
-export default toPatient;
+/**
+ * Helper function for exhaustive type checking
+ */
+export const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};

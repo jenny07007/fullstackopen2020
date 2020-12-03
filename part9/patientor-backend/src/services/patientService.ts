@@ -1,22 +1,22 @@
 import { v4 as uuidv4 } from "uuid";
-import patientsData from "../../data/patients.json";
+import patientsData from "../../data/patients";
 
 import { Patient, NonSSNPatients, NewPatientWithoutId } from "../../types";
 
-const patients: Array<Patient> = patientsData as Array<Patient>;
+// const patients: Array<Patient> = patientsData;
 
 // const getPatients = ():Array<Patient> => {
 //   return patients;
 // }
 
 const findById = (id: string): Patient | undefined => {
-  const entry = patients.find((d) => d.id === id);
+  const entry = patientsData.find((d) => d.id === id);
   return entry;
 };
 
 // exclude the files we dont want to show
 const getNonSSNPatients = (): NonSSNPatients[] => {
-  return patients.map(
+  return patientsData.map(
     ({ id, name, dateOfBirth, gender, occupation, entries }) => ({
       id,
       name,
@@ -36,7 +36,7 @@ const addPatient = (entry: NewPatientWithoutId): Patient => {
     entries: [],
   };
 
-  patients.push(newPatient);
+  patientsData.push(newPatient);
   return newPatient;
 };
 
