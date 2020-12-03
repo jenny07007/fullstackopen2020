@@ -273,6 +273,26 @@ type DiaryEntry = {
 };
 ```
 
+### Map object
+
+- [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+  -The Map's accessor function `get()` always returns a union of the declared value type and undefined, so TypeScript automatically requires you to perform validity checks on data retrieved from a map
+
+```js
+interface State {
+  patients: Map<string, Patient>;
+}
+...
+// type for myPatient is now Patient | undefined
+const myPatient = state.patients.get('non-existing-id');
+
+console.log(myPatient.name); // error, Object is possibly 'undefined'
+
+console.log(myPatient?.name); // valid code, but will log 'undefined'
+```
+
+- **warning**! Passing a type parameter to axios will not validate any data. It is quite dangerous especially if you are using external APIs. You can create custom validation functions which take in the whole payload and return the correct type, or you can use a type guard. Both are valid options. There are also many libraries that provide validation through different kind of schemas, for example [io-ts](https://github.com/gcanti/io-ts).
+
 #
 
 # Exercises
@@ -351,3 +371,10 @@ type DiaryEntry = {
 - Declare a new interface, that includes the description attribute and extends the CoursePartBase interface.
 - create a component `Part` that renders all attributes of each type of course part. Use a switch case-based exhaustive type checking! Use the new component in component `Content`.
 - add your own course part interface with at least the following attributes: `name`, `exerciseCount` and `description`.
+
+#
+
+- 9.16-9.18
+- Create an endpoint `/api/patients/:id` that returns all of the patient information for one patient, including the array of patient entries that is still empty for all the patients.
+- Create a page for showing a patient's full information in the frontend.
+- Refactor the code to use action creator functions that are all defined in the file reducer.tsx.

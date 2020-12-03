@@ -1,5 +1,4 @@
-import { Gender, NewPatientWithoutId } from './types';
-
+import { Gender, NewPatientWithoutId } from "./types";
 
 // -start ---> helpers
 const isString = (text: any): text is string => {
@@ -37,16 +36,15 @@ const parseGender = (gender: any): Gender => {
 
 // end ---> helpers
 
-
-// receives the request body as a parameter and 
+// receives the request body as a parameter and
 // returns a properly typed NewPatientWithoutId object
-const toNewPatient =  (object: any): NewPatientWithoutId => {
+const toNewPatient = (object: any): NewPatientWithoutId => {
   const newPatient: NewPatientWithoutId = {
     name: parseToString(object.name, "name"),
     dateOfBirth: parseDate(object.dateOfBirth),
     ssn: parseToString(object.ssn, "ssn"),
     occupation: parseToString(object.occupation, "occupation"),
-    gender: parseGender(object.gender)
+    gender: parseGender(object.gender),
   };
   return newPatient;
 };
