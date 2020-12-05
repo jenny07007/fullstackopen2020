@@ -3,10 +3,12 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Icon } from "semantic-ui-react";
 
-import { Patient } from "../types";
+import { Entry, Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import { useStateValue, updatePatient } from "../state";
 import { toPatient } from "../utils";
+
+import EntryDetails from "./EntryDetails";
 
 const genderIcons = {
   male: "mars" as "mars",
@@ -47,31 +49,11 @@ const PatientPage: React.FC = () => {
       </h1>
       <p>SSN: {patient.ssn}</p>
       <p>Occuption: {patient.occupation}</p>
-      {patient && <h2>Entries</h2>}
+      {patient.entries?.length !== 0 && <h2>Entries</h2>}
       {patient.entries &&
-        patient.entries.map((e) => (
-          <div key={e.id}>
-            <p>
-              <strong>{e.date} 📅 </strong> - {e.description}
-            </p>
-
-            <ul>
-              {!e.diagnosisCodes ? (
-                <p style={{ color: "gray" }}>No Diagnoses Code </p>
-              ) : (
-                e.diagnosisCodes?.map((code, i) => (
-                  <li key={i}>
-                    <p style={{ color: "gray", paddingTop: "10px" }}>
-                      Diagnoses Code{" "}
-                    </p>
-                    <p>
-                      <strong>{code}</strong> --{" "}
-                      {diagnoses[code] && diagnoses[code].name}
-                    </p>
-                  </li>
-                ))
-              )}
-            </ul>
+        patient.entries.map((p) => (
+          <div key={p.id}>
+            <EntryDetails entry={p} />
           </div>
         ))}
     </div>
