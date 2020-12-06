@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any*/
+
 import { Gender, Patient, Entry } from "./types";
 
 const isString = (text: any): text is string => {
@@ -58,7 +60,10 @@ export const assertNever = (value: never): never => {
 /**
  * Helper function for renderdiagnosesCode
  */
-export const renderdiagnosesCode = (diagnoses: {}, code: string) => {
+export const renderdiagnosesCode = (
+  diagnoses: Record<string, unknown>,
+  code: string
+) => {
   const codeArray = Object.values(diagnoses).map((d: any) => {
     if (d.code === code) {
       return `${code} - ${d.name}`;
