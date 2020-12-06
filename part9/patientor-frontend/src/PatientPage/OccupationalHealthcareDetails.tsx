@@ -1,10 +1,14 @@
 import React from "react";
 import { OccupationalHealthcareEntry } from "../types";
 import { Icon, Card } from "semantic-ui-react";
+import { renderdiagnosesCode } from "../utils";
+import { useStateValue } from "../state";
 
 const OccupationalHealthcareDetails: React.FC<{
   oh: OccupationalHealthcareEntry;
 }> = ({ oh }) => {
+  const [{ diagnoses }] = useStateValue();
+
   const renderSickLeave = () => (
     <Card.Description>
       <Card.Meta style={{ color: "purple" }}>
@@ -33,8 +37,10 @@ const OccupationalHealthcareDetails: React.FC<{
             </Card.Description>
           )}
           {oh.diagnosisCodes?.map((code) => (
-            <Card key={code}>
-              <Card.Description>{code}</Card.Description>
+            <Card key={code} style={{ padding: "5px 5px" }}>
+              <Card.Description>
+                {renderdiagnosesCode(diagnoses, code)}
+              </Card.Description>
             </Card>
           ))}
           {/*check sickLeave*/}

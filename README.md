@@ -1,6 +1,8 @@
 ##### My submissions for [Fullstack Open 2020](https://fullstack-hy2020.github.io/en/)
 
-- Before the part 4,the submissions will be the same to 2019, as the material of 2020 does not have big changes before then.
+- Part 10 is an additional content added in late 2020, as React Native is not my learning priority at this moment, I will pass it for now.
+
+---
 
 ### Part 0
 
@@ -109,3 +111,10 @@
 - First step with Typescript
 - Typing the express app
 - React with types
+
+### Part 10
+
+- Introduction to React Native
+- Ract Native basics
+- Communicating with server
+- Testing and extending the application

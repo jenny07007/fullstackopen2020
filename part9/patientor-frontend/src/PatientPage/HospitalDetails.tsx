@@ -1,8 +1,12 @@
 import React from "react";
 import { HospitalEntry } from "../types";
 import { Icon, Card } from "semantic-ui-react";
+import { useStateValue } from "../state";
+import { renderdiagnosesCode } from "../utils";
 
 const HospitalDetails: React.FC<{ hd: HospitalEntry }> = ({ hd }) => {
+  const [{ diagnoses }] = useStateValue();
+
   return (
     <Card.Group>
       <Card>
@@ -19,8 +23,10 @@ const HospitalDetails: React.FC<{ hd: HospitalEntry }> = ({ hd }) => {
             </Card.Description>
           )}
           {hd.diagnosisCodes?.map((code) => (
-            <Card key={code}>
-              <Card.Description>{code}</Card.Description>
+            <Card key={code} style={{ padding: "5px 5px" }}>
+              <Card.Description>
+                {renderdiagnosesCode(diagnoses, code)}
+              </Card.Description>
             </Card>
           ))}
           {/*check discharge*/}

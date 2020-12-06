@@ -54,3 +54,15 @@ export const assertNever = (value: never): never => {
     `Unhandled discriminated union member: ${JSON.stringify(value)}`
   );
 };
+
+/**
+ * Helper function for renderdiagnosesCode
+ */
+export const renderdiagnosesCode = (diagnoses: {}, code: string) => {
+  const codeArray = Object.values(diagnoses).map((d: any) => {
+    if (d.code === code) {
+      return `${code} - ${d.name}`;
+    }
+  });
+  return codeArray;
+};

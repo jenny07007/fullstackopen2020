@@ -293,6 +293,9 @@ console.log(myPatient?.name); // valid code, but will log 'undefined'
 
 - **warning**! Passing a type parameter to axios will not validate any data. It is quite dangerous especially if you are using external APIs. You can create custom validation functions which take in the whole payload and return the correct type, or you can use a type guard. Both are valid options. There are also many libraries that provide validation through different kind of schemas, for example [io-ts](https://github.com/gcanti/io-ts).
 
+### Formik package
+- [formik](https://formik.org/docs/overview)
+
 #
 
 # Exercises
@@ -365,7 +368,7 @@ console.log(myPatient?.name); // valid code, but will log 'undefined'
 
 #
 
-- 9.14-9.27
+- 9.14-9.17
 - Create a new Create React App with TypeScript, and set up eslint for the project
   - refactor the code so that it consists of three components: `Header`, `Content` and `Total`.
 - Declare a new interface, that includes the description attribute and extends the CoursePartBase interface.
@@ -378,3 +381,20 @@ console.log(myPatient?.name); // valid code, but will log 'undefined'
 - Create an endpoint `/api/patients/:id` that returns all of the patient information for one patient, including the array of patient entries that is still empty for all the patients.
 - Create a page for showing a patient's full information in the frontend.
 - Refactor the code to use action creator functions that are all defined in the file reducer.tsx.
+
+#
+
+- 9.19-9.22
+- Define the types `OccupationalHealthCareEntry` and `HospitalEntry` so that those conform with the example data.
+- Extend a patient's page in the frontend to list the `date`, `description` and `diagnose codes` of the patient's entries.
+- Fetch and add diagnoses to application state from `/`api/diagnosis` endpoint. Use the new diagnosis data to show the descriptions for patient's diagnosis codes
+- Extend the entry-listing in the patient page to include the Entry's details with a new component that shows rest of the information of the patients entries distinguishing different types from each other.
+
+#
+
+- 9.23-9.27
+- add an endpoint `/api/patients/:id/entries` to your backend, through which you can POST an entry for a patient
+- add a form for adding an entry to a patient to support `one` entry type in the frontend.
+- displays an error message if some required values are missing or formatted incorrectly
+- supports `two` entry types and displays an error message if some required values are missing or formatted incorrectly.
+- supports `all` the entry types and displays an error message if some required values are missing or formatted incorrectly.

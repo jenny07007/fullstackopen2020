@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Icon } from "semantic-ui-react";
 
-import { Entry, Patient } from "../types";
+import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import { useStateValue, updatePatient } from "../state";
 import { toPatient } from "../utils";
@@ -18,7 +18,7 @@ const genderIcons = {
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
   let patient = patients[id];
 
   try {

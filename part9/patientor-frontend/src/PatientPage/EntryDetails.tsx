@@ -3,10 +3,10 @@ import { Entry } from "../types";
 import HealthCheckDetails from "./HealthCheckDetails";
 import OccupationalHealthcareDetails from "./OccupationalHealthcareDetails";
 import HospitalDetails from "./HospitalDetails";
+import { useStateValue } from "../state";
 import { assertNever } from "../utils";
 
 const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
-  // console.log(entry);
   switch (entry.type) {
     case "HealthCheck":
       return <HealthCheckDetails healthEntry={entry} />;
