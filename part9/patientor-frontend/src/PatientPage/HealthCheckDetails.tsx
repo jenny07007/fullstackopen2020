@@ -16,13 +16,18 @@ const HealthCheckDetails: React.FC<{ healthEntry: HealthCheckEntry }> = ({
 
           <Card.Description>{healthEntry.description}</Card.Description>
           {/*check healthCheckRating*/}
-          {healthEntry.healthCheckRating === 0 ? (
+          {healthEntry.healthCheckRating === 1 ? (
             <Card.Content textAlign="right">
-              <Icon name="heart" color="green" />
+              <Icon name="heart" color="yellow" />
+            </Card.Content>
+          ) : healthEntry.healthCheckRating === 2 ||
+            healthEntry.healthCheckRating === 3 ? (
+            <Card.Content textAlign="right">
+              <Icon name="heart" color="red" />
             </Card.Content>
           ) : (
             <Card.Content textAlign="right">
-              <Icon name="heartbeat" color="yellow" />
+              <Icon name="heart" color="green" />
             </Card.Content>
           )}
         </Card.Content>

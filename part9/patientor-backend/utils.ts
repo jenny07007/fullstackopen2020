@@ -38,8 +38,13 @@ const isDate = (date: string): boolean => {
 };
 
 const parseDate = (date: any): string => {
-  if (!date || !isString(date) || !isDate(date)) {
-    throw new Error(`Incorrect or missing dateOfBirth`);
+  if (
+    !date ||
+    !isString(date) ||
+    !isDate(date) ||
+    !date.match(/^\d{4}[./-]\d{2}[./-]\d{2}$/g)
+  ) {
+    throw new Error(`Incorrect or missing date`);
   }
   return date;
 };

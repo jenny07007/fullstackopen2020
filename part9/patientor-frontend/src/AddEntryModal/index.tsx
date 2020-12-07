@@ -8,13 +8,19 @@ interface Props {
   modal: boolean;
   onClose: () => void;
   onSubmit: (values: newEntry) => void;
-  // error?: string;
+  error?: string;
 }
 
-const AddEntryModal: React.FC<Props> = ({ modal, onClose, onSubmit }) => (
+const AddEntryModal: React.FC<Props> = ({
+  modal,
+  onClose,
+  onSubmit,
+  error,
+}) => (
   <Modal open={modal} onClose={onClose} centered={false} closeIcon>
     <Modal.Header>Add a new entry</Modal.Header>
     <Modal.Content>
+      {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
       <AddEntryForm onSubmit={onSubmit} onCancel={onClose} />
     </Modal.Content>
   </Modal>

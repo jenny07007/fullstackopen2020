@@ -15,7 +15,7 @@ const OccupationalHealthcareDetails: React.FC<{
         Start: {oh.sickLeave?.startDate}
       </Card.Meta>
       <Card.Meta style={{ color: "purple" }}>
-        Start: {oh.sickLeave?.endDate}
+        End: {oh.sickLeave?.endDate}
       </Card.Meta>
     </Card.Description>
   );

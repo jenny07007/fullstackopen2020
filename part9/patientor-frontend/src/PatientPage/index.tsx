@@ -23,13 +23,9 @@ const PatientPage: React.FC = () => {
   let patient = patients[id];
 
   const [modal, setModal] = React.useState<boolean>(false);
-
+  const [error, setError] = React.useState<string | undefined>();
   const openModal = (): void => setModal(true);
   const closeModal = (): void => setModal(false);
-  // eslint-disable-next-line
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-  };
 
   try {
     patient = toPatient({ ...patient });
@@ -52,6 +48,22 @@ const PatientPage: React.FC = () => {
     fetchPatient();
   }, [id, dispatch]);
 
+  // eslint-disable-next-line
+  const onSubmit = async (values: any) => {
+    const body = { ...values };
+    try {
+      const { data: newEntry } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${patient.id}/entries`,
+        body
+      );
+      dispatch(updatePatient(newEntry));
+      closeModal();
+    } catch (error) {
+      console.error(error.response.data);
+      setError(error.response.data.Error);
+    }
+  };
+
   return !patient ? null : (
     <div>
       <h1>
@@ -67,7 +79,12 @@ const PatientPage: React.FC = () => {
           </div>
         ))}
       <div style={{ marginTop: "30px" }}>
-        <AddEntryModal modal={modal} onClose={closeModal} onSubmit={onSubmit} />
+        <AddEntryModal
+          error={error}
+          modal={modal}
+          onClose={closeModal}
+          onSubmit={onSubmit}
+        />
         <Button onClick={openModal}>Add Entry</Button>
       </div>
     </div>
